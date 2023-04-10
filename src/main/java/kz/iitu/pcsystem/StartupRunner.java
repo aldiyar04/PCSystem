@@ -1,5 +1,6 @@
 package kz.iitu.pcsystem;
 
+import kz.iitu.pcsystem.entity.CPUCooler;
 import kz.iitu.pcsystem.entity.SSD;
 import kz.iitu.pcsystem.scraper.technodom.*;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ public class StartupRunner implements ApplicationRunner {
     private final VideoCardScraper videoCardScraper;
     private final MemoryScraper memoryScraper;
     private final SSDScraper ssdScraper;
+    private final CPUCoolerScraper cpuCoolerScraper;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -24,6 +26,7 @@ public class StartupRunner implements ApplicationRunner {
 //        List<Motherboard> motherboards = motherboardScraper.scrapeMotherboards();
 //        List<VideoCard> videoCards = videoCardScraper.scrapeVideoCards();
 //        List<Memory> memories = memoryScraper.scrapeMemories();
-        List<SSD> ssds = ssdScraper.scrapeSSDs();
+//        List<SSD> ssds = ssdScraper.scrapeSSDs();
+        List<CPUCooler> cpuCoolers = cpuCoolerScraper.scrapeCPUCoolers();
     }
 }
