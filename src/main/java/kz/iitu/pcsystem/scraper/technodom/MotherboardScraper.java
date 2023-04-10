@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static kz.iitu.pcsystem.util.Util.mapBooleanField;
+
 @Component
 @AllArgsConstructor
 public class MotherboardScraper {
@@ -82,13 +84,5 @@ public class MotherboardScraper {
                 .toList();
         motherboards.forEach(System.out::println);
         return motherboards;
-    }
-
-    private void mapBooleanField(Map<String, String> map, String fieldName) {
-        String field = map.get(fieldName);
-        if (field != null) {
-            if (field.equals("Нет")) map.put(fieldName, "false");
-            else if (field.equals("Да")) map.put(fieldName, "true");
-        }
     }
 }
