@@ -1,7 +1,6 @@
 package kz.iitu.pcsystem;
 
-import kz.iitu.pcsystem.entity.CPUCooler;
-import kz.iitu.pcsystem.entity.SSD;
+import kz.iitu.pcsystem.entity.PowerSupply;
 import kz.iitu.pcsystem.scraper.technodom.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -19,6 +18,7 @@ public class StartupRunner implements ApplicationRunner {
     private final MemoryScraper memoryScraper;
     private final SSDScraper ssdScraper;
     private final CPUCoolerScraper cpuCoolerScraper;
+    private final PowerSupplyScraper powerSupplyScraper;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -27,6 +27,7 @@ public class StartupRunner implements ApplicationRunner {
 //        List<VideoCard> videoCards = videoCardScraper.scrapeVideoCards();
 //        List<Memory> memories = memoryScraper.scrapeMemories();
 //        List<SSD> ssds = ssdScraper.scrapeSSDs();
-        List<CPUCooler> cpuCoolers = cpuCoolerScraper.scrapeCPUCoolers();
+//        List<CPUCooler> cpuCoolers = cpuCoolerScraper.scrapeCPUCoolers();
+        List<PowerSupply> powerSupplies = powerSupplyScraper.scrapePowerSupplies();
     }
 }
