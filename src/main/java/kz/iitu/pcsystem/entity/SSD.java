@@ -15,7 +15,7 @@ public class SSD {
     private String formFactor;
     private String series;
     private String chipType;
-    private String amount;
+    private Integer capacity;
     private String writeSpeed;
     private String readSpeed;
     private String interfaceThroughput;

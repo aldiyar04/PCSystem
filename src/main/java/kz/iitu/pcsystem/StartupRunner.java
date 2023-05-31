@@ -20,6 +20,7 @@ public class StartupRunner implements ApplicationRunner {
     private final CPUCoolerScraper cpuCoolerScraper;
     private final PowerSupplyScraper powerSupplyScraper;
     private final CaseScraper caseScraper;
+    private final HDDScraper hddScraper;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -30,6 +31,7 @@ public class StartupRunner implements ApplicationRunner {
 //        List<SSD> ssds = ssdScraper.scrapeSSDs();
 //        List<CPUCooler> cpuCoolers = cpuCoolerScraper.scrapeCPUCoolers();
 //        List<PowerSupply> powerSupplies = powerSupplyScraper.scrapePowerSupplies();
-        List<Case> cases = caseScraper.scrapeCases();
+//        List<Case> cases = caseScraper.scrapeCases();
+        List<HDD> hdds = hddScraper.scrapeHDDs();
     }
 }

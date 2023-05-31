@@ -21,7 +21,7 @@ public class SSDScraper {
         put("formFactor", "Форм-фактор");
         put("series", "Серия");
         put("chipType", "Тип чипов");
-        put("amount", "Емкость накопителя, ГБ");
+        put("capacity", "Емкость накопителя, ГБ");
         put("writeSpeed", "Скорость записи до, Мбит/сек");
         put("readSpeed", "Скорость чтения до, Мбит/сек");
         put("interfaceThroughput", "Пропускная способность интерфейса, Гб/сек");
