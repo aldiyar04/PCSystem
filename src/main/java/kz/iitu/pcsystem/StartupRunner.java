@@ -1,8 +1,6 @@
 package kz.iitu.pcsystem;
 
-import kz.iitu.pcsystem.entity.CPU;
-import kz.iitu.pcsystem.entity.Case;
-import kz.iitu.pcsystem.entity.PowerSupply;
+import kz.iitu.pcsystem.entity.*;
 import kz.iitu.pcsystem.scraper.technodom.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -33,6 +31,5 @@ public class StartupRunner implements ApplicationRunner {
 //        List<CPUCooler> cpuCoolers = cpuCoolerScraper.scrapeCPUCoolers();
 //        List<PowerSupply> powerSupplies = powerSupplyScraper.scrapePowerSupplies();
         List<Case> cases = caseScraper.scrapeCases();
-
     }
 }

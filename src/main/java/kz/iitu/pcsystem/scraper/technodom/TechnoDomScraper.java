@@ -1,5 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
+import jdk.swing.interop.SwingInterOpUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -63,9 +64,9 @@ public class TechnoDomScraper {
     private Map<String, String> getComponentCharacteristicMap(String relativeUri, Map<String, String> characteristicMap) {
         Map<String, String> result = new HashMap<>();
 
-        Document doc = getPage("https://www.technodom.kz/" + relativeUri + "/specifications");
+        Document doc = getPage("https://www.technodom.kz" + relativeUri + "/specifications");
 
-        System.out.println("URL: https://www.technodom.kz/" + relativeUri + "/specifications");
+        System.out.println("URL: https://www.technodom.kz" + relativeUri + "/specifications");
 
         for (Map.Entry<String, String> entry : characteristicMap.entrySet()) {
             String componentPojoFieldName = entry.getKey();
@@ -77,7 +78,7 @@ public class TechnoDomScraper {
     }
 
     private String getCharacteristic(Document doc, String characteristicName) {
-        Element characteristicNameElem = doc.select("p:contains(" + characteristicName + ")").first();
+        Element characteristicNameElem = doc.select("p:matchesOwn(^" + characteristicName + "$)").first();
         if (characteristicNameElem == null) return null;
         Element characteristicValueElem = characteristicNameElem.parent().parent()
                 .nextElementSibling().nextElementSibling().firstElementChild();
