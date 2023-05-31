@@ -1,5 +1,7 @@
 package kz.iitu.pcsystem;
 
+import kz.iitu.pcsystem.entity.CPU;
+import kz.iitu.pcsystem.entity.Case;
 import kz.iitu.pcsystem.entity.PowerSupply;
 import kz.iitu.pcsystem.scraper.technodom.*;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ public class StartupRunner implements ApplicationRunner {
     private final SSDScraper ssdScraper;
     private final CPUCoolerScraper cpuCoolerScraper;
     private final PowerSupplyScraper powerSupplyScraper;
+    private final CaseScraper caseScraper;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -28,6 +31,8 @@ public class StartupRunner implements ApplicationRunner {
 //        List<Memory> memories = memoryScraper.scrapeMemories();
 //        List<SSD> ssds = ssdScraper.scrapeSSDs();
 //        List<CPUCooler> cpuCoolers = cpuCoolerScraper.scrapeCPUCoolers();
-        List<PowerSupply> powerSupplies = powerSupplyScraper.scrapePowerSupplies();
+//        List<PowerSupply> powerSupplies = powerSupplyScraper.scrapePowerSupplies();
+        List<Case> cases = caseScraper.scrapeCases();
+
     }
 }

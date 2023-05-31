@@ -3,6 +3,7 @@ package kz.iitu.pcsystem.scraper.technodom;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,8 +25,8 @@ public class TechnoDomScraper {
 
     private List<String> getComponentUris(String basePageUri)  {
         List<String> result = new ArrayList<>();
-        Document doc =getPage(basePageUri);
-        int pageCount = Integer.parseInt(doc.getElementsByClass("Paginator__List-Number").last().text());
+        Document doc = getPage(basePageUri);
+        int pageCount = getPageCount(doc);
         System.out.println("Page count: " + pageCount);
 
         List<String> urisFromPage = getItemUrisFromPage(doc);
@@ -39,6 +40,14 @@ public class TechnoDomScraper {
         }
 
         return result;
+    }
+
+    private int getPageCount(Document doc) {
+        Elements pageNumbers = doc.getElementsByClass("Paginator__List-Number");
+        if (pageNumbers.isEmpty()) {
+            return 1;
+        }
+        return Integer.parseInt(pageNumbers.last().text());
     }
 
     private List<String> getItemUrisFromPage(Document doc) {
@@ -56,6 +65,8 @@ public class TechnoDomScraper {
 
         Document doc = getPage("https://www.technodom.kz/" + relativeUri + "/specifications");
 
+        System.out.println("URL: https://www.technodom.kz/" + relativeUri + "/specifications");
+
         for (Map.Entry<String, String> entry : characteristicMap.entrySet()) {
             String componentPojoFieldName = entry.getKey();
             String technoDomCharacteristicName = entry.getValue();
@@ -66,9 +77,11 @@ public class TechnoDomScraper {
     }
 
     private String getCharacteristic(Document doc, String characteristicName) {
-        Element element = doc.select("p:contains(" + characteristicName + ")").first();
-        if (element == null) return null;
-        return element.parent().nextElementSibling().text();
+        Element characteristicNameElem = doc.select("p:contains(" + characteristicName + ")").first();
+        if (characteristicNameElem == null) return null;
+        Element characteristicValueElem = characteristicNameElem.parent().parent()
+                .nextElementSibling().nextElementSibling().firstElementChild();
+        return characteristicValueElem.text();
     }
 
     private Document getPage(String uri) {
