@@ -1,8 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.Motherboard;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -12,11 +10,7 @@ import java.util.Map;
 import static kz.iitu.pcsystem.util.Util.mapBooleanField;
 
 @Component
-@AllArgsConstructor
-public class MotherboardScraper {
-    private final TechnoDomScraper technoDomScraper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
+public class MotherboardScraper extends TechnoDomScraper<Motherboard> {
     private static final Map<String, String> motherboardCharacteristicMap = new HashMap<>() {{
         // main
         put("manufacturer", "Производитель");
@@ -71,18 +65,19 @@ public class MotherboardScraper {
         put("powerSupplyConnectorCounts", "Количество разъемов питания процессора");
     }};
 
-    public List<Motherboard> scrapeMotherboards() {
-        List<Motherboard> motherboards = technoDomScraper
-                .getComponentItems(TechnoDomScraper.COMPONENTS_BASE_URI + "/materinskie-platy", motherboardCharacteristicMap)
-                .stream()
-                .peek(motherboardMap -> {
-                    mapBooleanField(motherboardMap, "isECCSupported");
-                    mapBooleanField(motherboardMap, "isNVMeBootSupported");
-                    mapBooleanField(motherboardMap, "Intel Optane Memory");
-                })
-                .map(motherboardMap -> objectMapper.convertValue(motherboardMap, Motherboard.class))
-                .toList();
-        motherboards.forEach(System.out::println);
-        return motherboards;
+    @Override
+    public List<Motherboard> scrape() {
+        return scrapeComponentItems("materinskie-platy", motherboardCharacteristicMap, Motherboard.class);
+    }
+
+    @Override
+    protected Map<String, String> mapCharacteristics(Map<String, String> motherboardCharacteristicMap) {
+        Map<String, String> result = new HashMap<>(motherboardCharacteristicMap);
+
+        mapBooleanField(result, "isECCSupported");
+        mapBooleanField(result, "isNVMeBootSupported");
+        mapBooleanField(result, "isIntelOptaneMemory");
+
+        return result;
     }
 }

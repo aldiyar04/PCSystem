@@ -1,8 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.CPUCooler;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -10,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@AllArgsConstructor
-public class CPUCoolerScraper {
-    private final TechnoDomScraper technoDomScraper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
+public class CPUCoolerScraper extends TechnoDomScraper<CPUCooler> {
     private static final Map<String, String> cpuCoolerCharacteristicMap = new HashMap<>() {{
         put("noiseLevel", "Уровень шума, дБ");
         put("backlight", "Подсветка");
@@ -41,15 +35,13 @@ public class CPUCoolerScraper {
         put("coolingSystemDesign", "Конструкция системы охлаждения");
     }};
 
-    public List<CPUCooler> scrapeCPUCoolers() {
-        List<CPUCooler> cpuCoolers = technoDomScraper
-                .getComponentItems(TechnoDomScraper.COMPONENTS_BASE_URI + "/kulery-dlja-processorov", cpuCoolerCharacteristicMap)
-                .stream()
-                .peek(cpuCoolerMap -> {
-                })
-                .map(cpuCoolerMap -> objectMapper.convertValue(cpuCoolerMap, CPUCooler.class))
-                .toList();
-        cpuCoolers.forEach(System.out::println);
-        return cpuCoolers;
+    @Override
+    public List<CPUCooler> scrape() {
+        return scrapeComponentItems("kulery-dlja-processorov", cpuCoolerCharacteristicMap, CPUCooler.class);
+    }
+
+    @Override
+    protected Map<String, String> mapCharacteristics(Map<String, String> cpuCoolerCharacteristicMap) {
+        return cpuCoolerCharacteristicMap;
     }
 }

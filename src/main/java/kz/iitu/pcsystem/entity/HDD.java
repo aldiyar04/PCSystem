@@ -16,7 +16,7 @@ public class HDD {
     private BigDecimal width;
     private BigDecimal length;
     private BigDecimal weight;
-    private Integer capacity;
+    private String capacity;
     private String formFactor;
     private String spindleSpeed;
     private String series;
@@ -28,6 +28,6 @@ public class HDD {
     private Integer bufferMemory;
     private String maxOverloadOn;
     private BigDecimal averageWaitingTime;
-    private Integer noiseLevel;
+    private BigDecimal noiseLevel;
     private String maxOverloadOff;
 }

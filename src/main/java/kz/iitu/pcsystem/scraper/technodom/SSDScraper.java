@@ -1,8 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.SSD;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -10,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@AllArgsConstructor
-public class SSDScraper {
-    private final TechnoDomScraper technoDomScraper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
+public class SSDScraper extends TechnoDomScraper<SSD> {
     private static final Map<String, String> ssdCharacteristicMap = new HashMap<>() {{
         put("manufacturer", "Производитель");
         put("model", "Модель");
@@ -36,15 +30,13 @@ public class SSDScraper {
         put("activeEnergyConsumption", "Потребление энергии в режиме Active, Вт");
     }};
 
-    public List<SSD> scrapeSSDs() {
-        List<SSD> ssds = technoDomScraper
-                .getComponentItems(TechnoDomScraper.COMPONENTS_BASE_URI + "/ssd-diski", ssdCharacteristicMap)
-                .stream()
-                .peek(ssdMap -> {
-                })
-                .map(ssdMap -> objectMapper.convertValue(ssdMap, SSD.class))
-                .toList();
-        ssds.forEach(System.out::println);
-        return ssds;
+    @Override
+    public List<SSD> scrape() {
+        return scrapeComponentItems("ssd-diski", ssdCharacteristicMap, SSD.class);
+    }
+
+    @Override
+    protected Map<String, String> mapCharacteristics(Map<String, String> ssdCharacteristicMap) {
+        return ssdCharacteristicMap;
     }
 }

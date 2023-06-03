@@ -1,8 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.CPU;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -10,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@AllArgsConstructor
-public class CPUScraper {
-    private final TechnoDomScraper technoDomScraper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
+public class CPUScraper extends TechnoDomScraper<CPU> {
     private static final Map<String, String> cpuCharacteristicMap = new HashMap<>() {{
         put("manufacturer", "Производитель");
         put("model", "Модель");
@@ -39,24 +33,25 @@ public class CPUScraper {
         put("lithography", "Техпроцесс, Нм");
     }};
 
-    public List<CPU> scrapeCPUs() {
-        List<CPU> cpus = technoDomScraper
-                .getComponentItems(TechnoDomScraper.COMPONENTS_BASE_URI + "/processory", cpuCharacteristicMap)
-                .stream()
-                .peek(cpuMap -> {
-                    String maxMemory = cpuMap.get("maxMemory");
-                    if (maxMemory != null) {
-                        cpuMap.put("maxMemory", maxMemory.split(" ")[0]); // example of maxMemory: 128 Гб
-                    }
+    @Override
+    public List<CPU> scrape() {
+        return scrapeComponentItems("processory", cpuCharacteristicMap, CPU.class);
+    }
 
-                    String integratedGraphics = cpuMap.get("integratedGraphics");
-                    if (integratedGraphics != null && integratedGraphics.equals("Отсутствует")) {
-                        cpuMap.put("integratedGraphics", null);
-                    }
-                })
-                .map(cpuMap -> objectMapper.convertValue(cpuMap, CPU.class))
-                .toList();
-        cpus.forEach(System.out::println);
-        return cpus;
+    @Override
+    protected Map<String, String> mapCharacteristics(Map<String, String> cpuCharacteristicMap) {
+        Map<String, String> result = new HashMap<>(cpuCharacteristicMap);
+
+        String maxMemory = cpuCharacteristicMap.get("maxMemory");
+        if (maxMemory != null) {
+            result.put("maxMemory", maxMemory.split(" ")[0]); // example of maxMemory: 128 Гб
+        }
+
+        String integratedGraphics = cpuCharacteristicMap.get("integratedGraphics");
+        if (integratedGraphics != null && integratedGraphics.equals("Отсутствует")) {
+            result.put("integratedGraphics", null);
+        }
+
+        return result;
     }
 }

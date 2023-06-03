@@ -1,9 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.VideoCard;
-import kz.iitu.pcsystem.entity.VideoCard;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -13,11 +10,7 @@ import java.util.Map;
 import static kz.iitu.pcsystem.util.Util.mapBooleanField;
 
 @Component
-@AllArgsConstructor
-public class VideoCardScraper {
-    private final TechnoDomScraper technoDomScraper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
+public class VideoCardScraper extends TechnoDomScraper<VideoCard> {
     private static final Map<String, String> videoCardCharacteristicMap = new HashMap<>() {{
         put("manufacturer", "Производитель видеокарты");
         put("gpuManufacturer", "Производитель графического процессора");
@@ -46,21 +39,22 @@ public class VideoCardScraper {
         put("generalPurposeGPUComputingSupport", "Поддержка вычислений общего назначения на GPU");
     }};
 
-    public List<VideoCard> scrapeVideoCards() {
-        List<VideoCard> videoCards = technoDomScraper
-                .getComponentItems(TechnoDomScraper.COMPONENTS_BASE_URI + "/videokarty", videoCardCharacteristicMap)
-                .stream()
-                .peek(videoCardMap -> {
-                    mapBooleanField(videoCardMap, "isPhysXSupported");
+    @Override
+    public List<VideoCard> scrape() {
+        return scrapeComponentItems("videokarty", videoCardCharacteristicMap, VideoCard.class);
+    }
 
-                    String recommendedWattage = videoCardMap.get("recommendedWattage");
-                    if (recommendedWattage != null) {
-                        videoCardMap.put("recommendedWattage", recommendedWattage.split(" ")[0]); // example: 750 Вт
-                    }
-                })
-                .map(videoCardMap -> objectMapper.convertValue(videoCardMap, VideoCard.class))
-                .toList();
-        videoCards.forEach(System.out::println);
-        return videoCards;
+    @Override
+    protected Map<String, String> mapCharacteristics(Map<String, String> videoCardCharacteristicMap) {
+        Map<String, String> result = new HashMap<>(videoCardCharacteristicMap);
+
+        mapBooleanField(result, "isPhysXSupported");
+
+        String recommendedWattage = result.get("recommendedWattage");
+        if (recommendedWattage != null) {
+            result.put("recommendedWattage", recommendedWattage.split(" ")[0]); // example: 750 Вт
+        }
+
+        return result;
     }
 }

@@ -24,14 +24,14 @@ public class StartupRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-//        List<CPU> cpus = cpuScraper.scrapeCPUs();
-//        List<Motherboard> motherboards = motherboardScraper.scrapeMotherboards();
-//        List<VideoCard> videoCards = videoCardScraper.scrapeVideoCards();
-//        List<Memory> memories = memoryScraper.scrapeMemories();
-//        List<SSD> ssds = ssdScraper.scrapeSSDs();
-//        List<CPUCooler> cpuCoolers = cpuCoolerScraper.scrapeCPUCoolers();
-//        List<PowerSupply> powerSupplies = powerSupplyScraper.scrapePowerSupplies();
-//        List<Case> cases = caseScraper.scrapeCases();
-        List<HDD> hdds = hddScraper.scrapeHDDs();
+        List<CPU> cpus = cpuScraper.scrape();
+        List<Motherboard> motherboards = motherboardScraper.scrape();
+        List<VideoCard> videoCards = videoCardScraper.scrape();
+        List<Memory> memories = memoryScraper.scrape();
+        List<SSD> ssds = ssdScraper.scrape();
+        List<CPUCooler> cpuCoolers = cpuCoolerScraper.scrape();
+        List<PowerSupply> powerSupplies = powerSupplyScraper.scrape();
+        List<Case> cases = caseScraper.scrape();
+        List<HDD> hdds = hddScraper.scrape();
     }
 }

@@ -1,8 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.Memory;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -10,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@AllArgsConstructor
-public class MemoryScraper {
-    private final TechnoDomScraper technoDomScraper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
+public class MemoryScraper extends TechnoDomScraper<Memory> {
     private static final Map<String, String> memoryCharacteristicMap = new HashMap<>() {{
         put("manufacturer", "Производитель");
         put("model", "Модель");
@@ -41,15 +35,13 @@ public class MemoryScraper {
         put("backlightSync", "Синхронизация подсветки");
     }};
 
-    public List<Memory> scrapeMemories() {
-        List<Memory> memories = technoDomScraper
-                .getComponentItems(TechnoDomScraper.COMPONENTS_BASE_URI + "/operativnaja-pamjat", memoryCharacteristicMap)
-                .stream()
-                .peek(memoryMap -> {
-                })
-                .map(memoryMap -> objectMapper.convertValue(memoryMap, Memory.class))
-                .toList();
-        memories.forEach(System.out::println);
-        return memories;
+    @Override
+    public List<Memory> scrape() {
+        return scrapeComponentItems("operativnaja-pamjat", memoryCharacteristicMap, Memory.class);
+    }
+
+    @Override
+    protected Map<String, String> mapCharacteristics(Map<String, String> memoryCharacteristicMap) {
+        return memoryCharacteristicMap;
     }
 }

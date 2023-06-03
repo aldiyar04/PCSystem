@@ -1,8 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.PowerSupply;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -10,11 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-@AllArgsConstructor
-public class PowerSupplyScraper {
-    private final TechnoDomScraper technoDomScraper;
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
+public class PowerSupplyScraper extends TechnoDomScraper<PowerSupply> {
     private static final Map<String, String> powerSupplyCharacteristicMap = new HashMap<>() {{
         put("height", "Высота, см");
         put("width", "Ширина, см");
@@ -41,15 +35,13 @@ public class PowerSupplyScraper {
         put("motherboardPowerConnector", "Коннектор питания материнской платы");
     }};
 
-    public List<PowerSupply> scrapePowerSupplies() {
-        List<PowerSupply> powerSupplies = technoDomScraper
-                .getComponentItems(TechnoDomScraper.COMPONENTS_BASE_URI + "/bloki-pitanija", powerSupplyCharacteristicMap)
-                .stream()
-                .peek(powerSupplyMap -> {
-                })
-                .map(powerSupplyMap -> objectMapper.convertValue(powerSupplyMap, PowerSupply.class))
-                .toList();
-        powerSupplies.forEach(System.out::println);
-        return powerSupplies;
+    @Override
+    public List<PowerSupply> scrape() {
+        return scrapeComponentItems("bloki-pitanija", powerSupplyCharacteristicMap, PowerSupply.class);
+    }
+
+    @Override
+    protected Map<String, String> mapCharacteristics(Map<String, String> componentItemCharacteristicMap) {
+        return componentItemCharacteristicMap;
     }
 }
