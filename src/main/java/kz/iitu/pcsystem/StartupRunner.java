@@ -32,11 +32,6 @@ public class StartupRunner implements ApplicationRunner {
 
     private final CPURepository cpuRepository;
 
-    static {
-        String webDriverPath = StartupRunner.class.getClassLoader().getResource("chromedriver_114.0.5735.90.exe").getPath();
-        System.setProperty("webdriver.chrome.driver", webDriverPath);
-    }
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
 //        List<CPU> cpus = cpuTechndomScraper.scrape();

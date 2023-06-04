@@ -19,4 +19,9 @@ public abstract class BaseEntity {
     private String id;
 
     public abstract void setId();
+
+    public String getId() {
+        if (id == null) setId();
+        return id;
+    }
 }

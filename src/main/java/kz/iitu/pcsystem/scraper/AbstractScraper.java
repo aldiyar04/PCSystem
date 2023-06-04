@@ -2,23 +2,31 @@ package kz.iitu.pcsystem.scraper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.BaseEntity;
-import lombok.RequiredArgsConstructor;
+import kz.iitu.pcsystem.util.WebDriverUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public abstract class AbstractScraper<T extends BaseEntity> {
     private final String pageQueryParam;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private WebDriver driver;
+    @Autowired
+    private WebDriverUtil driverUtil;
+
+    public AbstractScraper(String pageQueryParam) {
+        this.pageQueryParam = pageQueryParam;
+    }
 
 //    public abstract Map<String, T> scrape();
     public abstract List<T> scrape();
@@ -117,14 +125,18 @@ public abstract class AbstractScraper<T extends BaseEntity> {
     protected abstract String getCharacteristic(Document doc, String characteristicName);
 
     protected Document getPage(String uri) {
-//        ChromeDriver driver = new ChromeDriver();
+        driver.get(uri);
+        driverUtil.waitForPageLoad();
+        driverUtil.scrollToPageBottom();
+        String html = driverUtil.getCurrentHtml();
+        return Jsoup.parse(html);
 
-        try {
-            return Jsoup.connect(uri)
-                    .get();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Could not send request to " + uri);
-        }
+//        try {
+//            return Jsoup.connect(uri)
+//                    .get();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            throw new RuntimeException("Could not send request to " + uri);
+//        }
     }
 }
