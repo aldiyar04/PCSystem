@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Motherboard {
+    private String productUID;
     private String manufacturer;
     private String model;
     private String supportedOSes;

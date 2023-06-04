@@ -8,11 +8,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CPU {
+public class CPU implements Identifiable {
+    private String productUID;
     private String manufacturer;
     private String model;
     private String integratedGraphics;
     private String packaging;
+    private String technologies;
 
     private BigDecimal coreClock;
     private BigDecimal boostCoreClock; // nullable
@@ -32,4 +34,8 @@ public class CPU {
     private Integer maxMemory;
     private Integer maxMemoryChannels;
     private String supportedMemoryTypes;
+
+    public String getFullyQualifiedId() {
+        return manufacturer + " " + model;
+    }
 }

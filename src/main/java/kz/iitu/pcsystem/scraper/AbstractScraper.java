@@ -1,7 +1,8 @@
 package kz.iitu.pcsystem.scraper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
+import kz.iitu.pcsystem.entity.Identifiable;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -11,23 +12,45 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
-public abstract class AbstractScraper<T> {
-    protected final String pageQueryParam;
+@RequiredArgsConstructor
+public abstract class AbstractScraper<T extends Identifiable> {
+    private final String pageQueryParam;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public abstract List<T> scrape();
+    public abstract Map<String, T> scrape();
+//    public abstract List<T> scrape();
 
-    protected List<T> scrapeComponentItems(String componentBasePageUri, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
-        List<T> componentItems = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
+    protected Map<String, T> scrapeComponentItems(String componentBasePageUri, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
+        Map<String, T> componentItems = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
                 .stream()
                 .map(this::mapCharacteristics)
                 .map(componentItemCharacteristicMap -> objectMapper.convertValue(componentItemCharacteristicMap, componentPojoClass))
-                .toList();
-        componentItems.forEach(System.out::println);
+                .peek(comopnentPojo -> {
+
+                })
+                .collect(Collectors.toMap(componentPojo -> componentPojo.getFullyQualifiedId(), componentPojo -> componentPojo,
+                        (first, second) -> {
+                            System.out.println("\nDUPLICATES:");
+                            System.out.println(first.getFullyQualifiedId() + " : " + first);
+                            System.out.println(second.getFullyQualifiedId() + " : " + second);
+                            System.out.println();
+                            return first;
+                        }));
+        componentItems.forEach((key, value) -> System.out.println(key + " : " + value));
         return componentItems;
     }
+
+//    protected List<T> scrapeComponentItems(String componentBasePageUri, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
+//        List<T> componentItems = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
+//                .stream()
+//                .map(this::mapCharacteristics)
+//                .map(componentItemCharacteristicMap -> objectMapper.convertValue(componentItemCharacteristicMap, componentPojoClass))
+//                .toList();
+//        componentItems.forEach(System.out::println);
+//        return componentItems;
+//    }
 
     protected abstract Map<String, String> mapCharacteristics(Map<String, String> componentItemCharacteristicMap);
 

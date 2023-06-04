@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Memory {
+    private String productUID;
     private String manufacturer;
     private String model;
-    private String productUID;
     private String packaging;
     private String series;
     private String formFactor;

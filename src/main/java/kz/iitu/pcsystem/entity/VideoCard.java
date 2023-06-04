@@ -12,9 +12,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 public class VideoCard {
+    private String productUID;
     private String manufacturer;
     private String gpuManufacturer;
-    private String productUID;
     private String technologies;
     private String gpuSeries;
     private BigDecimal throughput;
