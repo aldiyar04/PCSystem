@@ -1,16 +1,17 @@
 package kz.iitu.pcsystem.scraper.techplaza;
 
-import kz.iitu.pcsystem.entity.Identifiable;
+import kz.iitu.pcsystem.entity.BaseEntity;
 import kz.iitu.pcsystem.scraper.AbstractScraper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 
 @Component
-public abstract class TechplazaScraper<T extends Identifiable> extends AbstractScraper<T> {
+public abstract class TechplazaScraper<T extends BaseEntity> extends AbstractScraper<T> {
     private static final String COMPONENTS_BASE_URI = "https://www.dns-shop.kz/catalog/";
 
     public TechplazaScraper() {
@@ -18,7 +19,7 @@ public abstract class TechplazaScraper<T extends Identifiable> extends AbstractS
     }
 
     @Override
-    protected Map<String, T> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
+    protected List<T> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
         return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
     }
 

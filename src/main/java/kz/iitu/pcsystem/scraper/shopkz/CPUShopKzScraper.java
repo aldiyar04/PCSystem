@@ -4,6 +4,7 @@ import kz.iitu.pcsystem.entity.CPU;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -42,7 +43,7 @@ public class CPUShopKzScraper extends ShopKzScraper<CPU> {
     }};
 
     @Override
-    public Map<String, CPU> scrape() {
+    public List<CPU> scrape() {
         return scrapeComponentItems("protsessory", cpuCharacteristicMap, CPU.class);
     }
 

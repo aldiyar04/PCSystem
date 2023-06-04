@@ -1,15 +1,19 @@
 package kz.iitu.pcsystem.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+import java.util.UUID;
+
+@Entity
+
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Motherboard {
+@EqualsAndHashCode(callSuper = false)
+public class Motherboard extends BaseEntity {
     private String productUID;
     private String manufacturer;
     private String model;
@@ -48,4 +52,9 @@ public class Motherboard {
     private String backPanelAudioConnectors;
     private String backPanelVideoConnectors;
     private String powerSupplyConnectorCounts;
+
+    @Override
+    public void setId() {
+        setId(UUID.randomUUID().toString());
+    }
 }

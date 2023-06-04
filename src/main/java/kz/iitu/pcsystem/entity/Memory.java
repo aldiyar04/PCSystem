@@ -1,15 +1,19 @@
 package kz.iitu.pcsystem.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+import java.util.UUID;
+
+@Entity
+
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Memory {
+@EqualsAndHashCode(callSuper = false)
+public class Memory extends BaseEntity {
     private String productUID;
     private String manufacturer;
     private String model;
@@ -32,4 +36,9 @@ public class Memory {
     private String isRgbBacklight;
     private String isCoolingRadiator;
     private String backlightSync;
+
+    @Override
+    public void setId() {
+        setId(UUID.randomUUID().toString());
+    }
 }

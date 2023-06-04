@@ -1,19 +1,26 @@
 package kz.iitu.pcsystem.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
 
-@Builder
+@Entity
+
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CPU implements Identifiable {
+@EqualsAndHashCode(callSuper = false)
+public class CPU extends BaseEntity {
     private String productUID;
     private String manufacturer;
     private String model;
     private String integratedGraphics;
     private String packaging;
+    @Lob
     private String technologies;
 
     private BigDecimal coreClock;
@@ -37,5 +44,10 @@ public class CPU implements Identifiable {
 
     public String getFullyQualifiedId() {
         return manufacturer + " " + model;
+    }
+
+    @Override
+    public void setId() {
+        setId(manufacturer + " " + model);
     }
 }

@@ -1,17 +1,20 @@
 package kz.iitu.pcsystem.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
-@Builder
+@Entity
+
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class VideoCard {
+@EqualsAndHashCode(callSuper = false)
+public class VideoCard extends BaseEntity {
     private String productUID;
     private String manufacturer;
     private String gpuManufacturer;
@@ -37,4 +40,9 @@ public class VideoCard {
     private Boolean isPhysXSupported;
     private String maxDisplayResolution;
     private String generalPurposeGPUComputingSupport;
+
+    @Override
+    public void setId() {
+        setId(UUID.randomUUID().toString());
+    }
 }

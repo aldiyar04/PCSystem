@@ -1,15 +1,19 @@
 package kz.iitu.pcsystem.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+import java.util.UUID;
+
+@Entity
+
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CPUCooler {
+@EqualsAndHashCode(callSuper = false)
+public class CPUCooler extends BaseEntity {
     private String noiseLevel;
     private String backlight;
     private String mountType;
@@ -33,4 +37,9 @@ public class CPUCooler {
     private String rotationalSpeed;
     private String fanDimensions;
     private String coolingSystemDesign;
+
+    @Override
+    public void setId() {
+        setId(UUID.randomUUID().toString());
+    }
 }

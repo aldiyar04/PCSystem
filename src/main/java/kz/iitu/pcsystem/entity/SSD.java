@@ -1,15 +1,19 @@
 package kz.iitu.pcsystem.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+import java.util.UUID;
+
+@Entity
+
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class SSD {
+@EqualsAndHashCode(callSuper = false)
+public class SSD extends BaseEntity {
     private String manufacturer;
     private String model;
     private String formFactor;
@@ -28,4 +32,9 @@ public class SSD {
     private String meanTimeBetweenFailures;
     private String idleEnergyConsumption;
     private String activeEnergyConsumption;
+
+    @Override
+    public void setId() {
+        setId(UUID.randomUUID().toString());
+    }
 }

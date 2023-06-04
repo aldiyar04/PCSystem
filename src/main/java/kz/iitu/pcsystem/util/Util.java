@@ -10,4 +10,8 @@ public class Util {
             else if (field.equals("Да")) map.put(fieldName, "true");
         }
     }
+
+    public static void setCpuId(Map<String, String> cpuCharacteristicMap) {
+        cpuCharacteristicMap.put("id", cpuCharacteristicMap.get("manufacturer") + " " + cpuCharacteristicMap.get("model"));
+    }
 }

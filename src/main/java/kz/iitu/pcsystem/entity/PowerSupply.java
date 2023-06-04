@@ -1,17 +1,20 @@
 package kz.iitu.pcsystem.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
-@Builder
+@Entity
+
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PowerSupply {
+@EqualsAndHashCode(callSuper = false)
+public class PowerSupply extends BaseEntity {
     private BigDecimal height;
     private BigDecimal width;
     private BigDecimal length;
@@ -35,4 +38,9 @@ public class PowerSupply {
     private String videoCardPowerConnector;
     private Integer floppyConnectorCount;
     private String motherboardPowerConnector;
+
+    @Override
+    public void setId() {
+        setId(UUID.randomUUID().toString());
+    }
 }

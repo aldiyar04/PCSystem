@@ -1,7 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
 import kz.iitu.pcsystem.entity.CPU;
-import kz.iitu.pcsystem.entity.Identifiable;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -37,7 +36,7 @@ public class CPUTechnodomScraper extends TechnodomScraper<CPU> {
     }};
 
     @Override
-    public Map<String, CPU> scrape() {
+    public List<CPU> scrape() {
         return scrapeComponentItems("processory", cpuCharacteristicMap, CPU.class);
     }
 

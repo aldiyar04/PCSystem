@@ -1,17 +1,20 @@
 package kz.iitu.pcsystem.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Entity;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
-@Builder
+@Entity
+
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class Case {
+@EqualsAndHashCode(callSuper = false)
+public class Case extends BaseEntity {
     private BigDecimal height;
     private BigDecimal width;
     private BigDecimal length;
@@ -36,4 +39,9 @@ public class Case {
     private BigDecimal maxCpuCoolerHeight;
     private String cpuCoolingIncluded;
     private String powerSupplyLocation;
+
+    @Override
+    public void setId() {
+        setId(UUID.randomUUID().toString());
+    }
 }

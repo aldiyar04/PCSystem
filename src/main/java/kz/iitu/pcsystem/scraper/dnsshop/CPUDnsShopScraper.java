@@ -1,10 +1,12 @@
 package kz.iitu.pcsystem.scraper.dnsshop;
 
 import kz.iitu.pcsystem.entity.CPU;
+import kz.iitu.pcsystem.util.Util;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,7 +17,7 @@ public class CPUDnsShopScraper extends DnsShopScraper<CPU> {
     }};
 
     @Override
-    public Map<String, CPU> scrape() {
+    public List<CPU> scrape() {
         return scrapeComponentItems("17a899cd16404e77/processory", cpuCharacteristicMap, CPU.class);
     }
 
@@ -26,6 +28,7 @@ public class CPUDnsShopScraper extends DnsShopScraper<CPU> {
         result.put("manufacturer", result.get("model").split(" ")[0]);
         result.put("model", Arrays.stream(result.get("model").split(" ")).skip(1).collect(Collectors.joining(" ")));
 
+        Util.setCpuId(componentItemCharacteristicMap);
         return result;
     }
 }

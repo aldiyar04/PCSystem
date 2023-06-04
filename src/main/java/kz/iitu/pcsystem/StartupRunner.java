@@ -1,6 +1,7 @@
 package kz.iitu.pcsystem;
 
 import kz.iitu.pcsystem.entity.*;
+import kz.iitu.pcsystem.repository.CPURepository;
 import kz.iitu.pcsystem.scraper.dnsshop.CPUDnsShopScraper;
 import kz.iitu.pcsystem.scraper.shopkz.CPUShopKzScraper;
 import kz.iitu.pcsystem.scraper.technodom.*;
@@ -29,6 +30,13 @@ public class StartupRunner implements ApplicationRunner {
     private final CPUShopKzScraper cpuShopKzScraper;
     private final CPUDnsShopScraper cpuDnsShopScraper;
 
+    private final CPURepository cpuRepository;
+
+    static {
+        String webDriverPath = StartupRunner.class.getClassLoader().getResource("chromedriver_114.0.5735.90.exe").getPath();
+        System.setProperty("webdriver.chrome.driver", webDriverPath);
+    }
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
 //        List<CPU> cpus = cpuTechndomScraper.scrape();
@@ -42,14 +50,14 @@ public class StartupRunner implements ApplicationRunner {
 //        List<HDD> hdds = hddTechndomScraper.scrape();
         Map<Integer, Integer> cpuCounts = new HashMap<>();
 
-        Map<String, CPU> cpusShopKz = cpuShopKzScraper.scrape();
-        Map<String, CPU> cpusTechnodom = cpuTechndomScraper.scrape();
-        Map<String, CPU> cpusDnsShop = cpuDnsShopScraper.scrape();
+//        List<CPU> cpusShopKz = cpuShopKzScraper.scrape();
+        List<CPU> cpusTechnodom = cpuTechndomScraper.scrape();
+//        List<CPU> cpusDnsShop = cpuDnsShopScraper.scrape();
+
+        cpuRepository.saveAll(cpusTechnodom);
 
         List<String> allCpuIds = new ArrayList<>();
-        cpusShopKz.forEach((cpuId, cpu) -> allCpuIds.add(cpu.getFullyQualifiedId()));
-        cpusTechnodom.forEach((cpuId, cpu) -> allCpuIds.add(cpu.getFullyQualifiedId()));
-        cpusDnsShop.forEach((cpuId, cpu) -> allCpuIds.add(cpu.getFullyQualifiedId()));
+
 
 //        cpusTechnodom.forEach((cpuId, cpuTechnodom) -> {
 //            int count = 1;
@@ -62,11 +70,8 @@ public class StartupRunner implements ApplicationRunner {
 //            cpuCounts.put(count, cpuCounts.getOrDefault(count, 0) + 1);
 //        });
 
-//        allCpuIds.forEach(cpuId -> {
+//        cpusShopKz.forEach((cpuId, cpuTechnodom) -> {
 //            int count = 1;
-//            if (cpusShopKz.get(cpuId) != null) {
-//                count++;
-//            }
 //            if (cpusTechnodom.get(cpuId) != null) {
 //                count++;
 //            }
@@ -76,20 +81,9 @@ public class StartupRunner implements ApplicationRunner {
 //            cpuCounts.put(count, cpuCounts.getOrDefault(count, 0) + 1);
 //        });
 
-        cpusShopKz.forEach((cpuId, cpuTechnodom) -> {
-            int count = 1;
-            if (cpusTechnodom.get(cpuId) != null) {
-                count++;
-            }
-            if (cpusDnsShop.get(cpuId) != null) {
-                count++;
-            }
-            cpuCounts.put(count, cpuCounts.getOrDefault(count, 0) + 1);
-        });
-
-        System.out.println("COMMON COUNT");
-        cpuCounts.forEach((storeCount, cpuCount) -> {
-            System.out.println(storeCount + " : " + cpuCount);
-        });
+//        System.out.println("COMMON COUNT");
+//        cpuCounts.forEach((storeCount, cpuCount) -> {
+//            System.out.println(storeCount + " : " + cpuCount);
+//        });
     }
 }
