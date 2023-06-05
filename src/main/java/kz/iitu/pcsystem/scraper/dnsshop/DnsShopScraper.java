@@ -1,7 +1,9 @@
 package kz.iitu.pcsystem.scraper.dnsshop;
 
 import kz.iitu.pcsystem.entity.BaseEntity;
+import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.scraper.AbstractScraper;
+import kz.iitu.pcsystem.scraper.SecondaryStoreScraper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -11,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public abstract class DnsShopScraper<T extends BaseEntity> extends AbstractScraper<T> {
+public abstract class DnsShopScraper<T extends BaseEntity> extends SecondaryStoreScraper<T> {
     private static final String COMPONENTS_BASE_URI = "https://www.dns-shop.kz/catalog/";
 
     public DnsShopScraper() {
@@ -19,7 +21,7 @@ public abstract class DnsShopScraper<T extends BaseEntity> extends AbstractScrap
     }
 
     @Override
-    protected List<T> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
+    protected List<ComponentProduct<T>> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
         return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
     }
 

@@ -1,6 +1,8 @@
 package kz.iitu.pcsystem.scraper.shopkz;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.BaseEntity;
+import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.scraper.AbstractScraper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,13 +15,14 @@ import java.util.Map;
 @Component
 public abstract class ShopKzScraper<T extends BaseEntity> extends AbstractScraper<T> {
     private static final String COMPONENTS_BASE_URI = "https://shop.kz/";
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public ShopKzScraper() {
         super("PAGEN_1");
     }
 
     @Override
-    protected List<T> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
+    protected List<ComponentProduct<T>> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
         return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
     }
 

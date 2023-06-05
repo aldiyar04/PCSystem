@@ -1,6 +1,7 @@
 package kz.iitu.pcsystem.scraper.dnsshop;
 
 import kz.iitu.pcsystem.entity.CPU;
+import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.util.Util;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ public class CPUDnsShopScraper extends DnsShopScraper<CPU> {
     }};
 
     @Override
-    public List<CPU> scrape() {
+    public List<ComponentProduct<CPU>> scrape() {
         return scrapeComponentItems("17a899cd16404e77/processory", cpuCharacteristicMap, CPU.class);
     }
 

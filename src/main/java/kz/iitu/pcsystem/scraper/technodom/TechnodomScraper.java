@@ -1,7 +1,9 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
 import kz.iitu.pcsystem.entity.BaseEntity;
+import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.scraper.AbstractScraper;
+import kz.iitu.pcsystem.scraper.SecondaryStoreScraper;
 import kz.iitu.pcsystem.util.WebDriverUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public abstract class TechnodomScraper<T extends BaseEntity> extends AbstractScraper<T> {
+public abstract class TechnodomScraper<T extends BaseEntity> extends SecondaryStoreScraper<T> {
     private static final String BASE_URI = "https://www.technodom.kz";
     private static final String COMPONENTS_BASE_URI = "https://www.technodom.kz/catalog/noutbuki-i-komp-jutery/komplektujuschie/";
     @Autowired
@@ -31,7 +33,7 @@ public abstract class TechnodomScraper<T extends BaseEntity> extends AbstractScr
     }
 
     @Override
-    protected List<T> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
+    protected List<ComponentProduct<T>> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
         return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
     }
 

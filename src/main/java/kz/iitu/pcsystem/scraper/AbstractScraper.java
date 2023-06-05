@@ -2,13 +2,11 @@ package kz.iitu.pcsystem.scraper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kz.iitu.pcsystem.entity.BaseEntity;
-import kz.iitu.pcsystem.util.WebDriverUtil;
+import kz.iitu.pcsystem.entity.Product;
+import kz.iitu.pcsystem.pojo.ComponentProduct;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,20 +22,25 @@ public abstract class AbstractScraper<T extends BaseEntity> {
         this.pageQueryParam = pageQueryParam;
     }
 
-    public abstract List<T> scrape();
+    public abstract List<ComponentProduct<T>> scrape();
 
-    protected List<T> scrapeComponentItems(String componentBasePageUri, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
-        List<T> componentItems = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
+    protected List<ComponentProduct<T>> scrapeComponentItems(String componentBasePageUri, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
+        List<ComponentProduct<T>> componentProducts = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
                 .stream()
                 .map(this::mapCharacteristics)
                 .map(componentItemCharacteristicMap -> {
                     T componentPojo = objectMapper.convertValue(componentItemCharacteristicMap, componentPojoClass);
                     componentPojo.setId();
-                    return componentPojo;
+
+                    Product product = objectMapper.convertValue(componentItemCharacteristicMap, Product.class);
+                    product.setId();
+                    product.setComponentId(componentPojo.getId());
+
+                    return new ComponentProduct<T>(componentPojo, product);
                 })
                 .toList();
-        componentItems.forEach(System.out::println);
-        return componentItems;
+        componentProducts.forEach(System.out::println);
+        return componentProducts;
     }
 
     protected abstract Map<String, String> mapCharacteristics(Map<String, String> componentItemCharacteristicMap);

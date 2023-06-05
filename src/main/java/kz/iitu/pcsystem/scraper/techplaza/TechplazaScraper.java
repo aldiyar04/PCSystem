@@ -1,7 +1,8 @@
 package kz.iitu.pcsystem.scraper.techplaza;
 
 import kz.iitu.pcsystem.entity.BaseEntity;
-import kz.iitu.pcsystem.scraper.AbstractScraper;
+import kz.iitu.pcsystem.pojo.ComponentProduct;
+import kz.iitu.pcsystem.scraper.SecondaryStoreScraper;
 import kz.iitu.pcsystem.util.WebDriverUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public abstract class TechplazaScraper<T extends BaseEntity> extends AbstractScraper<T> {
+public abstract class TechplazaScraper<T extends BaseEntity> extends SecondaryStoreScraper<T> {
     private static final String COMPONENTS_BASE_URI = "https://techplaza.kz/Komplektujushhie/";
     @Autowired
     private WebDriver driver;
@@ -28,7 +29,7 @@ public abstract class TechplazaScraper<T extends BaseEntity> extends AbstractScr
     }
 
     @Override
-    protected List<T> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
+    protected List<ComponentProduct<T>> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
         return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
     }
 

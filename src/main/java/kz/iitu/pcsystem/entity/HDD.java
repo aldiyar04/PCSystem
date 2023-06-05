@@ -1,5 +1,6 @@
 package kz.iitu.pcsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -14,6 +15,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HDD extends BaseEntity {
     private BigDecimal height;
     private BigDecimal width;

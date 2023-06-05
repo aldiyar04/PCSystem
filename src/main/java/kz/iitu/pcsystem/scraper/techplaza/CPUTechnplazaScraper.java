@@ -1,6 +1,7 @@
 package kz.iitu.pcsystem.scraper.techplaza;
 
 import kz.iitu.pcsystem.entity.CPU;
+import kz.iitu.pcsystem.pojo.ComponentProduct;
 import org.jsoup.nodes.Document;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class CPUTechnplazaScraper extends TechplazaScraper<CPU> {
     }};
 
     @Override
-    public List<CPU> scrape() {
+    public List<ComponentProduct<CPU>> scrape() {
         return scrapeComponentItems("Processory", cpuCharacteristicMap, CPU.class);
     }
 

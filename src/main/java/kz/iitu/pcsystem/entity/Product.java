@@ -1,5 +1,6 @@
 package kz.iitu.pcsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,10 +18,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Product extends BaseEntity {
     private String componentId;
     private String componentType;
-    private String packaging;
     private BigDecimal price;
     private String uri;
 

@@ -1,9 +1,13 @@
 package kz.iitu.pcsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.core.io.BigDecimalParser;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.lang.Nullable;
 
 import java.math.BigDecimal;
 
@@ -14,37 +18,73 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CPU extends BaseEntity {
-    private String productUID;
+    @Column(nullable = false)
     private String manufacturer;
+
+    @Column(nullable = false)
     private String model;
+
+    @Column(nullable = false)
+    private String socket; // comp
+
+    @Column(nullable = false)
+    private Integer coreCount;
+
+    @Column(nullable = false)
+    private Integer threadCount;
+
+    @Column(nullable = false)
+    private BigDecimal coreClock;
+
+    @Column(nullable = false)
+    private BigDecimal boostCoreClock; // nullable
+
+    @Column(nullable = false)
+    private String microArchitecture;
+
+    @Column(nullable = false)
+    private String cacheL1;
+
+    @Column(nullable = false)
+    private String cacheL2;
+
+    @Column(nullable = false)
+    private String cacheL3;
+
+    @Column(nullable = false)
+    private String supportedMemoryTypes; // comp
+
+    @Column(nullable = false)
+    private Integer maxMemory; // comp
+
+    @Column(nullable = false)
+    private Boolean isEccMemorySupported; // comp probably
+
+    @Column(nullable = false)
     private String integratedGraphics;
-    private String packaging;
+
+    @Column(nullable = false)
+    private Integer lithography;
+
+    @Column(nullable = false)
+    private BigDecimal tdp;
+
+    @Column
+    private BigDecimal maxTdp;
+
+    @Column(nullable = false)
     @Lob
     private String technologies;
 
-    private BigDecimal coreClock;
-    private BigDecimal boostCoreClock; // nullable
-    private BigDecimal tdp;
-    private Integer coreCount;
-    private Integer threadCount;
-    private String cacheL1;
-    private String cacheL2;
-    private String cacheL3;
-    private Integer lithography;
+    @Column(nullable = false)
+    @Lob
+    private String instructions;
+
+    @Column(nullable = false)
     private Integer criticalTemperature;
-    private String supportedOSes;
-    private Integer pciExpressVersion;
-    private Integer maxPciExpressChannels;
-
-    private String socket;
-    private Integer maxMemory;
-    private Integer maxMemoryChannels;
-    private String supportedMemoryTypes;
-
-    public String getFullyQualifiedId() {
-        return manufacturer + " " + model;
-    }
 
     @Override
     public void setId() {

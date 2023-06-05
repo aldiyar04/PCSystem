@@ -1,6 +1,7 @@
 package kz.iitu.pcsystem;
 
 import kz.iitu.pcsystem.entity.*;
+import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.repository.CPURepository;
 import kz.iitu.pcsystem.scraper.dnsshop.CPUDnsShopScraper;
 import kz.iitu.pcsystem.scraper.shopkz.CPUShopKzScraper;
@@ -44,10 +45,10 @@ public class StartupRunner implements ApplicationRunner {
 //        List<HDD> hdds = hddTechndomScraper.scrape();
         Map<Integer, Integer> cpuCounts = new HashMap<>();
 
-        List<CPU> cpusTechnodom = cpuTechndomScraper.scrape();
-        List<CPU> cpusTechplaza = cpuTechplazaScraper.scrape();
-        List<CPU> cpusShopKz = cpuShopKzScraper.scrape();
-        List<CPU> cpusDnsShop = cpuDnsShopScraper.scrape();
+        List<ComponentProduct<CPU>> cpusTechnodom = cpuTechndomScraper.scrape();
+        List<ComponentProduct<CPU>> cpusTechplaza = cpuTechplazaScraper.scrape();
+        List<ComponentProduct<CPU>> cpusShopKz = cpuShopKzScraper.scrape();
+        List<ComponentProduct<CPU>> cpusDnsShop = cpuDnsShopScraper.scrape();
 
         Map<String, CPU> cpuMapShopKz = convertToMap(cpusShopKz);
         Map<String, CPU> cpuMapTechnodom = convertToMap(cpusTechnodom);
@@ -77,7 +78,9 @@ public class StartupRunner implements ApplicationRunner {
         });
     }
 
-    private Map<String, CPU> convertToMap(List<CPU> cpus) {
+    private Map<String, CPU> convertToMap(List<ComponentProduct<CPU>> cpuProducts) {
+        List<CPU> cpus = cpuProducts.stream().map(ComponentProduct::getComponent).toList();
+
         Map<String, CPU> cpuMap = new HashMap<>();
         for (CPU cpu : cpus) {
             cpuMap.put(cpu.getId(), cpu);

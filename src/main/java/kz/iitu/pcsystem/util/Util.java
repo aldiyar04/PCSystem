@@ -7,7 +7,7 @@ public class Util {
         String field = map.get(fieldName);
         if (field != null) {
             if (field.equals("Нет")) map.put(fieldName, "false");
-            else if (field.equals("Да")) map.put(fieldName, "true");
+            else map.put(fieldName, "true");
         }
     }
 
