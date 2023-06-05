@@ -23,18 +23,12 @@ public abstract class ShopKzScraper<T extends BaseEntity> extends AbstractScrape
         return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
     }
 
-//    @Override
-//    protected List<T> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
-//        return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
-//    }
-
     @Override
     protected int getPageCount(Document doc) {
         Elements paginationContainer = doc.select("div.bx-pagination-container > ul:first-child");
         if (paginationContainer.isEmpty()) {
             return 1;
         }
-//        System.out.println(paginationContainer.get(0));
         Elements pageNumbers = paginationContainer.get(0)
                 .children();
         pageNumbers.remove(pageNumbers.size() - 1); // remove last one that points to next page; the one before it points to last page

@@ -2,17 +2,29 @@ package kz.iitu.pcsystem.scraper.technodom;
 
 import kz.iitu.pcsystem.entity.BaseEntity;
 import kz.iitu.pcsystem.scraper.AbstractScraper;
+import kz.iitu.pcsystem.util.WebDriverUtil;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Component
 public abstract class TechnodomScraper<T extends BaseEntity> extends AbstractScraper<T> {
+    private static final String BASE_URI = "https://www.technodom.kz";
     private static final String COMPONENTS_BASE_URI = "https://www.technodom.kz/catalog/noutbuki-i-komp-jutery/komplektujuschie/";
+    @Autowired
+    private WebDriver driver;
+    @Autowired
+    private WebDriverUtil driverUtil;
 
     public TechnodomScraper() {
         super("page");
@@ -23,9 +35,40 @@ public abstract class TechnodomScraper<T extends BaseEntity> extends AbstractScr
         return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
     }
 
+
 //    @Override
-//    protected List<T> scrapeComponentItems(String componentUriPart, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
-//        return super.scrapeComponentItems(COMPONENTS_BASE_URI + componentUriPart, characteristicMap, componentPojoClass);
+//    protected List<String> getComponentRelativeUris(String basePageUri) {
+//        List<String> result = new ArrayList<>();
+//        getPage(basePageUri);
+//
+//        WebElement confirmingCityModal = driver.findElement(By.xpath("//p[contains(text(), 'Ваш город')]"));
+//        if (confirmingCityModal != null) {
+//            WebElement closeModalButton = confirmingCityModal.findElement(By.xpath("./following-sibling::*/button/*[contains(text(), 'Да')]"));
+//            closeModalButton.click();
+//        }
+//
+//        WebElement cityListButton = driver.findElement(By.cssSelector("button > p.city-selector__title"));
+//        cityListButton.click();
+//
+//        WebElement moreCitiesButton = driver.findElement(By.xpath("//button//*[contains(text(), 'еще')]"));
+//        moreCitiesButton.click();
+//
+//        List<String> baseComponentUrisForSpecificCities = new ArrayList<>();
+//
+//        WebElement parentOfUriElements = driver.findElement(By.xpath("//p[contains(text(), 'Выберите город')]/following-sibling::*"));
+//        String html = parentOfUriElements.getAttribute("outerHTML");
+//        Document doc = Jsoup.parse(html);
+//        Elements links = doc.select("a");
+//        for (Element link : links) {
+//            String uri = link.attr("href");
+//            baseComponentUrisForSpecificCities.add(uri);
+//        }
+//
+//        for (String uri : baseComponentUrisForSpecificCities) {
+//            result.addAll(super.getComponentRelativeUris(BASE_URI + uri));
+//        }
+//
+//        return result;
 //    }
 
     @Override
@@ -44,7 +87,7 @@ public abstract class TechnodomScraper<T extends BaseEntity> extends AbstractScr
 
     @Override
     protected Document getPageFromRelativeUri(String relativeUri) {
-        return getPage("https://www.technodom.kz" + relativeUri + "/specifications");
+        return getPage(BASE_URI + relativeUri + "/specifications");
     }
 
     @Override
@@ -54,5 +97,14 @@ public abstract class TechnodomScraper<T extends BaseEntity> extends AbstractScr
         Element characteristicValueElem = characteristicNameElem.parent().parent()
                 .nextElementSibling().nextElementSibling().firstElementChild();
         return characteristicValueElem.text();
+    }
+
+    @Override
+    protected Document getPage(String uri) {
+        driver.get(uri);
+        driverUtil.waitForPageLoad();
+        driverUtil.scrollToPageBottom();
+        String html = driverUtil.getCurrentHtml();
+        return Jsoup.parse(html);
     }
 }

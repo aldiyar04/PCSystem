@@ -39,18 +39,12 @@ public class CPUShopKzScraper extends ShopKzScraper<CPU> {
 //        put("pciExpressVersion", "Стандарт PCI Express");
 //        put("maxPciExpressChannels", "Стандарт PCI Express");
 //        put("supportedOSes", "Поддержка ОС");
-
     }};
 
     @Override
     public List<CPU> scrape() {
         return scrapeComponentItems("protsessory", cpuCharacteristicMap, CPU.class);
     }
-
-//    @Override
-//    public List<CPU> scrape() {
-//        return scrapeComponentItems("protsessory", cpuCharacteristicMap, CPU.class);
-//    }
 
     @Override
     protected Map<String, String> mapCharacteristics(Map<String, String> cpuCharacteristicMap) {

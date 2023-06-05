@@ -40,11 +40,6 @@ public class CPUTechnodomScraper extends TechnodomScraper<CPU> {
         return scrapeComponentItems("processory", cpuCharacteristicMap, CPU.class);
     }
 
-//    @Override
-//    public List<CPU> scrape() {
-//        return scrapeComponentItems("processory", cpuCharacteristicMap, CPU.class);
-//    }
-
     @Override
     protected Map<String, String> mapCharacteristics(Map<String, String> cpuCharacteristicMap) {
         Map<String, String> result = new HashMap<>(cpuCharacteristicMap);

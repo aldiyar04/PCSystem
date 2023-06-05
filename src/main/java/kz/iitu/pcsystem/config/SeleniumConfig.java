@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 public class SeleniumConfig {
     static {
@@ -19,10 +21,16 @@ public class SeleniumConfig {
     @Bean(destroyMethod = "quit")
     @Scope("singleton")
     public WebDriver webDriver() {
+        boolean isHeadless = false;
         ChromeOptions options = new ChromeOptions();
-//        options.setHeadless(true);
+        options.setHeadless(isHeadless);
         options.addArguments("--remote-allow-origins=*");
-        return new ChromeDriver(options);
+        WebDriver driver =  new ChromeDriver(options);
+        if (!isHeadless) {
+            driver.manage().window().maximize();
+        }
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        return driver;
     }
 
     @Bean

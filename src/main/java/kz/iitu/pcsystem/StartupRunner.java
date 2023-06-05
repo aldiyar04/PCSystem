@@ -5,15 +5,13 @@ import kz.iitu.pcsystem.repository.CPURepository;
 import kz.iitu.pcsystem.scraper.dnsshop.CPUDnsShopScraper;
 import kz.iitu.pcsystem.scraper.shopkz.CPUShopKzScraper;
 import kz.iitu.pcsystem.scraper.technodom.*;
+import kz.iitu.pcsystem.scraper.techplaza.CPUTechnplazaScraper;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @AllArgsConstructor
@@ -29,6 +27,7 @@ public class StartupRunner implements ApplicationRunner {
 //    private final HDDTechndomScraper hddTechndomScraper;
     private final CPUShopKzScraper cpuShopKzScraper;
     private final CPUDnsShopScraper cpuDnsShopScraper;
+    private final CPUTechnplazaScraper cpuTechplazaScraper;
 
     private final CPURepository cpuRepository;
 
@@ -45,40 +44,44 @@ public class StartupRunner implements ApplicationRunner {
 //        List<HDD> hdds = hddTechndomScraper.scrape();
         Map<Integer, Integer> cpuCounts = new HashMap<>();
 
-//        List<CPU> cpusShopKz = cpuShopKzScraper.scrape();
         List<CPU> cpusTechnodom = cpuTechndomScraper.scrape();
-//        List<CPU> cpusDnsShop = cpuDnsShopScraper.scrape();
+        List<CPU> cpusTechplaza = cpuTechplazaScraper.scrape();
+        List<CPU> cpusShopKz = cpuShopKzScraper.scrape();
+        List<CPU> cpusDnsShop = cpuDnsShopScraper.scrape();
 
-        cpuRepository.saveAll(cpusTechnodom);
+        Map<String, CPU> cpuMapShopKz = convertToMap(cpusShopKz);
+        Map<String, CPU> cpuMapTechnodom = convertToMap(cpusTechnodom);
+        Map<String, CPU> cpuMapDnsShop = convertToMap(cpusDnsShop);
+        Map<String, CPU> cpuMapTechplaza = convertToMap(cpusTechplaza);
 
-        List<String> allCpuIds = new ArrayList<>();
+//        cpuRepository.saveAll(cpusShopKz);
 
 
-//        cpusTechnodom.forEach((cpuId, cpuTechnodom) -> {
-//            int count = 1;
-//            if (cpusShopKz.get(cpuId) != null) {
-//                count++;
-//            }
-//            if (cpusDnsShop.get(cpuId) != null) {
-//                count++;
-//            }
-//            cpuCounts.put(count, cpuCounts.getOrDefault(count, 0) + 1);
-//        });
+        cpuMapShopKz.forEach((cpuId, cpuShopKz) -> {
+            int count = 1;
+            if (cpuMapTechnodom.get(cpuId) != null) {
+                count++;
+            }
+            if (cpuMapDnsShop.get(cpuId) != null) {
+                count++;
+            }
+            if (cpuMapTechplaza.get(cpuId) != null) {
+                count++;
+            }
+            cpuCounts.put(count, cpuCounts.getOrDefault(count, 0) + 1);
+        });
 
-//        cpusShopKz.forEach((cpuId, cpuTechnodom) -> {
-//            int count = 1;
-//            if (cpusTechnodom.get(cpuId) != null) {
-//                count++;
-//            }
-//            if (cpusDnsShop.get(cpuId) != null) {
-//                count++;
-//            }
-//            cpuCounts.put(count, cpuCounts.getOrDefault(count, 0) + 1);
-//        });
+        System.out.println("\n\n\nCOMMON COUNT (SHOP-KZ)");
+        cpuCounts.forEach((storeCount, cpuCount) -> {
+            System.out.println(storeCount + " : " + cpuCount);
+        });
+    }
 
-//        System.out.println("COMMON COUNT");
-//        cpuCounts.forEach((storeCount, cpuCount) -> {
-//            System.out.println(storeCount + " : " + cpuCount);
-//        });
+    private Map<String, CPU> convertToMap(List<CPU> cpus) {
+        Map<String, CPU> cpuMap = new HashMap<>();
+        for (CPU cpu : cpus) {
+            cpuMap.put(cpu.getId(), cpu);
+        }
+        return cpuMap;
     }
 }

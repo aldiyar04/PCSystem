@@ -19,38 +19,12 @@ import java.util.Map;
 public abstract class AbstractScraper<T extends BaseEntity> {
     private final String pageQueryParam;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    @Autowired
-    private WebDriver driver;
-    @Autowired
-    private WebDriverUtil driverUtil;
 
     public AbstractScraper(String pageQueryParam) {
         this.pageQueryParam = pageQueryParam;
     }
 
-//    public abstract Map<String, T> scrape();
     public abstract List<T> scrape();
-
-//    protected Map<String, T> scrapeComponentItems(String componentBasePageUri, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
-//        Map<String, T> componentItems = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
-//                .stream()
-//                .map(this::mapCharacteristics)
-//                .map(componentItemCharacteristicMap -> {
-//                    T componentPojo = objectMapper.convertValue(componentItemCharacteristicMap, componentPojoClass);
-//                    componentPojo.setId();
-//                    return componentPojo;
-//                })
-//                .collect(Collectors.toMap(componentPojo -> componentPojo.getId(), componentPojo -> componentPojo,
-//                        (first, second) -> {
-//                            System.out.println("\nDUPLICATES:");
-//                            System.out.println(first.getId() + " : " + first);
-//                            System.out.println(second.getId() + " : " + second);
-//                            System.out.println();
-//                            return first;
-//                        }));
-//        componentItems.forEach((key, value) -> System.out.println(key + " : " + value));
-//        return componentItems;
-//    }
 
     protected List<T> scrapeComponentItems(String componentBasePageUri, Map<String, String> characteristicMap, Class<T> componentPojoClass) {
         List<T> componentItems = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
@@ -75,7 +49,7 @@ public abstract class AbstractScraper<T extends BaseEntity> {
                 .toList();
     }
 
-    private List<String> getComponentRelativeUris(String basePageUri)  {
+    protected List<String> getComponentRelativeUris(String basePageUri)  {
         List<String> result = new ArrayList<>();
         Document doc = getPage(basePageUri);
         int pageCount = getPageCount(doc);
@@ -125,18 +99,12 @@ public abstract class AbstractScraper<T extends BaseEntity> {
     protected abstract String getCharacteristic(Document doc, String characteristicName);
 
     protected Document getPage(String uri) {
-        driver.get(uri);
-        driverUtil.waitForPageLoad();
-        driverUtil.scrollToPageBottom();
-        String html = driverUtil.getCurrentHtml();
-        return Jsoup.parse(html);
-
-//        try {
-//            return Jsoup.connect(uri)
-//                    .get();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            throw new RuntimeException("Could not send request to " + uri);
-//        }
+        try {
+            return Jsoup.connect(uri)
+                    .get();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Could not send request to " + uri);
+        }
     }
 }

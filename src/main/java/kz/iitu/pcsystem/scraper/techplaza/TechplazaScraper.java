@@ -2,9 +2,14 @@ package kz.iitu.pcsystem.scraper.techplaza;
 
 import kz.iitu.pcsystem.entity.BaseEntity;
 import kz.iitu.pcsystem.scraper.AbstractScraper;
+import kz.iitu.pcsystem.util.WebDriverUtil;
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -12,10 +17,14 @@ import java.util.Map;
 
 @Component
 public abstract class TechplazaScraper<T extends BaseEntity> extends AbstractScraper<T> {
-    private static final String COMPONENTS_BASE_URI = "https://www.dns-shop.kz/catalog/";
+    private static final String COMPONENTS_BASE_URI = "https://techplaza.kz/Komplektujushhie/";
+    @Autowired
+    private WebDriver driver;
+    @Autowired
+    private WebDriverUtil driverUtil;
 
     public TechplazaScraper() {
-        super("p");
+        super("page");
     }
 
     @Override
@@ -25,29 +34,43 @@ public abstract class TechplazaScraper<T extends BaseEntity> extends AbstractScr
 
     @Override
     protected int getPageCount(Document doc) {
-        Elements pageNumbers = doc.select("li[data-role=pagination-page] > " +
-                "a:not(.pagination-widget__page-link_next):not(.pagination-widget__page-link_last)"); // these 2 classes are for ">" and ">>" buttons in pagination
+        Elements pageNumbers = doc.select("ul.pagination > li > a");
         if (pageNumbers.isEmpty()) {
             return 1;
         }
+        pageNumbers = new Elements(pageNumbers.subList(0, pageNumbers.size() - 2)); // last 2 links are ">" and ">|" buttons
         return Integer.parseInt(pageNumbers.last().text());
     }
 
     @Override
     protected Elements getItemUriElementsFromPage(Document doc) {
-        return doc.getElementsByClass("catalog-product__image-link");
+        return doc.select(".product-name > a");
     }
 
     @Override
     protected Document getPageFromRelativeUri(String relativeUri) {
-        return getPage("https://www.dns-shop.kz" + relativeUri + "characteristics");
+        String actuallyAbsoluteUri = relativeUri;
+        Document doc = getPage(actuallyAbsoluteUri);
+        WebElement openCharacteristicsButton = driver.findElement(By.cssSelector("a[href=\"#tab-specification\"]"));
+        openCharacteristicsButton.click();
+        return doc;
     }
 
     @Override
     protected String getCharacteristic(Document doc, String characteristicName) {
-        Element characteristicNameElem = doc.select("div.product-characteristics__spec-title:containsOwn(" + characteristicName + ")").first();
-        if (characteristicNameElem == null) return null;
-        Element characteristicValueElem = characteristicNameElem.nextElementSibling();
-        return characteristicValueElem.text().strip(); // TODO; account for cases when text is spread out among child elements and tag itself
+        if ("Производитель".equals(characteristicName)) {
+            return doc.select("b:containsOwn(Производитель)").first()
+                    .nextElementSibling()
+                    .firstElementChild().text();
+        }
+        return null;
+    }
+
+    @Override
+    protected Document getPage(String uri) {
+        driver.get(uri);
+        driverUtil.waitForPageLoad();
+        String html = driverUtil.getCurrentHtml();
+        return Jsoup.parse(html);
     }
 }
