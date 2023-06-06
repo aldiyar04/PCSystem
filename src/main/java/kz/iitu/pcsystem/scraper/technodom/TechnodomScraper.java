@@ -1,26 +1,21 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import kz.iitu.pcsystem.entity.BaseEntity;
+import kz.iitu.pcsystem.entity.Component;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
-import kz.iitu.pcsystem.scraper.AbstractScraper;
 import kz.iitu.pcsystem.scraper.SecondaryStoreScraper;
 import kz.iitu.pcsystem.util.WebDriverUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Component
-public abstract class TechnodomScraper<T extends BaseEntity> extends SecondaryStoreScraper<T> {
+@org.springframework.stereotype.Component
+public abstract class TechnodomScraper<T extends Component> extends SecondaryStoreScraper<T> {
     private static final String BASE_URI = "https://www.technodom.kz";
     private static final String COMPONENTS_BASE_URI = "https://www.technodom.kz/catalog/noutbuki-i-komp-jutery/komplektujuschie/";
     @Autowired
@@ -30,6 +25,11 @@ public abstract class TechnodomScraper<T extends BaseEntity> extends SecondarySt
 
     public TechnodomScraper() {
         super("page");
+    }
+
+    @Override
+    protected String getWebsiteBaseUri() {
+        return BASE_URI;
     }
 
     @Override
@@ -94,6 +94,15 @@ public abstract class TechnodomScraper<T extends BaseEntity> extends SecondarySt
 
     @Override
     protected String getCharacteristic(Document doc, String characteristicName) {
+        if ("цена".equals(characteristicName)) {
+            String price = doc.select("p:containsOwn(₸)").first().text();
+            System.out.println("PRICE: " + price);
+            price = price.replaceAll("\\s|\\u00A0", ""); // replace NBSP as well
+            return price.substring(0, price.indexOf("₸"));
+        } else if ("в наличии".equals(characteristicName)) {
+            return "true";
+        }
+
         Element characteristicNameElem = doc.select("p:matchesOwn(^" + characteristicName + "$)").first();
         if (characteristicNameElem == null) return null;
         Element characteristicValueElem = characteristicNameElem.parent().parent()

@@ -16,7 +16,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Memory extends BaseEntity {
+public class Memory extends Component {
     private String productUID;
     private String manufacturer;
     private String model;

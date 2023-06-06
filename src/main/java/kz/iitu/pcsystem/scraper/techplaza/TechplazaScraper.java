@@ -1,23 +1,23 @@
 package kz.iitu.pcsystem.scraper.techplaza;
 
-import kz.iitu.pcsystem.entity.BaseEntity;
+import kz.iitu.pcsystem.entity.Component;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.scraper.SecondaryStoreScraper;
 import kz.iitu.pcsystem.util.WebDriverUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
-@Component
-public abstract class TechplazaScraper<T extends BaseEntity> extends SecondaryStoreScraper<T> {
+@org.springframework.stereotype.Component
+public abstract class TechplazaScraper<T extends Component> extends SecondaryStoreScraper<T> {
     private static final String COMPONENTS_BASE_URI = "https://techplaza.kz/Komplektujushhie/";
     @Autowired
     private WebDriver driver;
@@ -26,6 +26,11 @@ public abstract class TechplazaScraper<T extends BaseEntity> extends SecondarySt
 
     public TechplazaScraper() {
         super("page");
+    }
+
+    @Override
+    protected String getWebsiteBaseUri() {
+        return "https://techplaza.kz";
     }
 
     @Override
@@ -59,6 +64,15 @@ public abstract class TechplazaScraper<T extends BaseEntity> extends SecondarySt
 
     @Override
     protected String getCharacteristic(Document doc, String characteristicName) {
+        if ("цена".equals(characteristicName)) {
+            String price = doc.select(".autocalc-product-price:containsOwn(₸)").first().text();
+            price = price.replaceAll("\\s", "");
+            return price.substring(0, price.indexOf("₸"));
+        } else if ("в наличии".equals(characteristicName)) {
+            Element isAvailableElement = doc.select(".stock_status_success:containsOwn(Есть в наличии)").first();
+            return Boolean.toString(isAvailableElement != null);
+        }
+
         if ("Производитель".equals(characteristicName)) {
             return doc.select("b:containsOwn(Производитель)").first()
                     .nextElementSibling()

@@ -52,18 +52,22 @@ public class CPUShopKzScraper extends ShopKzScraper<CPU> {
         result.remove("cpuType");
 
         String maxMemory = result.get("maxMemory");
-        result.put("maxMemory", maxMemory.split(" ")[0]); // example: 128 Гб
+        if (maxMemory != null)
+            result.put("maxMemory", maxMemory.split(" ")[0]); // example: 128 Гб
 
-        Util.mapBooleanField(cpuCharacteristicMap, "isEccMemorySupported");
+        Util.mapBooleanField(result, "isEccMemorySupported");
 
         String lithography = result.get("lithography");
-        result.put("lithography", lithography.split(" ")[0]); // example: 7 нм
+        if (lithography != null)
+            result.put("lithography", lithography.split(" ")[0]); // example: 7 нм
 
         String tdp = result.get("tdp");
-        result.put("tdp", tdp.split(" ")[0]); // example: 65 Вт
+        if (tdp != null)
+            result.put("tdp", tdp.split(" ")[0]); // example: 65 Вт
 
         String criticalTemperature = result.get("criticalTemperature");
-        result.put("criticalTemperature", criticalTemperature.split("°")[0]); // example: 90°C
+        if (criticalTemperature != null)
+            result.put("criticalTemperature", criticalTemperature.split("°")[0]); // example: 90°C
 
         return result;
     }

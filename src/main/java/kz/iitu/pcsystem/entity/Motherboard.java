@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
@@ -16,48 +17,32 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Motherboard extends BaseEntity {
-    private String productUID;
+public class Motherboard extends Component {
     private String manufacturer;
     private String model;
-    private String supportedOSes;
-    private String formFactor;
-    private String supportedCPUs;
-    private String chipset;
-    private String features;
     private String socket;
-    private String supportedCPUGenerations;
+    private String supportedCPUMicroArchitectures;
+    private String chipset;
+    private String technologies;
+    private String formFactor;
+    private Integer memorySlotCount;
+    private String supportedMemoryTypes; // map from website in same format as CPU
+    private Integer maxMemory;
+    private Integer sata3SlotCount; // map
+    private Integer ssdSlotCount; // map
+    private String supportedSsdFormFactor; // map
+    private String m2Slots;
+    private String pcieSlots;
+    private String pcieVersion;
+    private String audioCodec;
+    private String internalConnectors;
+    private String powerSupplyConnectors;
     private String bios;
-    private String internalUsbPorts;
-    private String maxMemory;
-    private String isECCSupported;
-    private String supportedMemoryTypes;
-    private String memoryConnectorCount;
-    private String raid;
-    private String isNVMeBootSupported;
-    private Integer m2ConnectorCount;
-    private String sataConnectorCount;
-    private String isIntelOptaneMemory;
-    private String bluetooth;
-    private String network;
-    private String supportedWiFiFeatures;
-    private String networkController;
-    private String multiGpuSupport;
-    private String sound;
-    private String soundChannelCount;
-    private String soundAdapterChipset;
-    private String keyboard;
-    private String connectors;
-    private String mouse;
-    private String pciExpressSlots;
-    private String pciExpressVersions;
-    private Integer usbPortCount;
-    private String backPanelAudioConnectors;
-    private String backPanelVideoConnectors;
-    private String powerSupplyConnectorCounts;
+    private BigDecimal length;
+    private BigDecimal width;
 
     @Override
     public void setId() {
-        setId(UUID.randomUUID().toString());
+        setId(manufacturer + " " + model);
     }
 }

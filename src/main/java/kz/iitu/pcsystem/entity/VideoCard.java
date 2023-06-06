@@ -17,7 +17,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VideoCard extends BaseEntity {
+public class VideoCard extends Component {
     private String productUID;
     private String manufacturer;
     private String gpuManufacturer;

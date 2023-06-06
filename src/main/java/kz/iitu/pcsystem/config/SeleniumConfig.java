@@ -14,8 +14,8 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class SeleniumConfig {
     static {
-        String webDriverPath = StartupRunner.class.getClassLoader().getResource("chromedriver_114.0.5735.90.exe").getPath();
-        System.setProperty("webdriver.chrome.driver", webDriverPath);
+//        String webDriverPath = StartupRunner.class.getClassLoader().getResource("chromedriver_114.0.5735.90.exe").getPath();
+        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver_114.0.5735.90.exe");
     }
 
     @Bean(destroyMethod = "quit")

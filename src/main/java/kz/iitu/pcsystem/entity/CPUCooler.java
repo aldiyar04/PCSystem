@@ -16,7 +16,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CPUCooler extends BaseEntity {
+public class CPUCooler extends Component {
     private String noiseLevel;
     private String backlight;
     private String mountType;

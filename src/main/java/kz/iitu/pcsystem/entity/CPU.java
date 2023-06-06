@@ -1,15 +1,12 @@
 package kz.iitu.pcsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.core.io.BigDecimalParser;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.lang.Nullable;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 
@@ -20,7 +17,7 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CPU extends BaseEntity {
+public class CPU extends Component {
     @Column(nullable = false)
     private String manufacturer;
 
@@ -39,51 +36,51 @@ public class CPU extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal coreClock;
 
-    @Column(nullable = false)
+    @Column
     private BigDecimal boostCoreClock; // nullable
 
-    @Column(nullable = false)
+    @Column
     private String microArchitecture;
 
-    @Column(nullable = false)
+    @Column
     private String cacheL1;
 
-    @Column(nullable = false)
+    @Column
     private String cacheL2;
 
-    @Column(nullable = false)
+    @Column
     private String cacheL3;
 
-    @Column(nullable = false)
+    @Column
     private String supportedMemoryTypes; // comp
 
-    @Column(nullable = false)
+    @Column
     private Integer maxMemory; // comp
 
-    @Column(nullable = false)
+    @Column
     private Boolean isEccMemorySupported; // comp probably
 
-    @Column(nullable = false)
+    @Column
     private String integratedGraphics;
 
-    @Column(nullable = false)
+    @Column
     private Integer lithography;
 
-    @Column(nullable = false)
+    @Column
     private BigDecimal tdp;
 
     @Column
     private BigDecimal maxTdp;
 
-    @Column(nullable = false)
+    @Column
     @Lob
     private String technologies;
 
-    @Column(nullable = false)
+    @Column
     @Lob
     private String instructions;
 
-    @Column(nullable = false)
+    @Column
     private Integer criticalTemperature;
 
     @Override

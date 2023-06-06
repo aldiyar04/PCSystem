@@ -17,7 +17,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Case extends BaseEntity {
+public class Case extends Component {
     private BigDecimal height;
     private BigDecimal width;
     private BigDecimal length;

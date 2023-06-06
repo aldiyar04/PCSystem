@@ -17,7 +17,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HDD extends BaseEntity {
+public class HDD extends Component {
     private BigDecimal height;
     private BigDecimal width;
     private BigDecimal length;

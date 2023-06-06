@@ -29,7 +29,6 @@ public class CPUDnsShopScraper extends DnsShopScraper<CPU> {
         result.put("manufacturer", result.get("model").split(" ")[0]);
         result.put("model", Arrays.stream(result.get("model").split(" ")).skip(1).collect(Collectors.joining(" ")));
 
-        Util.setCpuId(componentItemCharacteristicMap);
         return result;
     }
 }
