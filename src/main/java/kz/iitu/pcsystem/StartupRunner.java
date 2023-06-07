@@ -1,6 +1,5 @@
 package kz.iitu.pcsystem;
 
-import kz.iitu.pcsystem.util.CPUScrapingManager;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

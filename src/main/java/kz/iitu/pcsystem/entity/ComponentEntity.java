@@ -27,11 +27,6 @@ public abstract class ComponentEntity {
     @Column(nullable = false)
     private String imageUri;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(nullable = false)
-    private byte[] image;
-
     public abstract void setId();
 
     public String getId() {

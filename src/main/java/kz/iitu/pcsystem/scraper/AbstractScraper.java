@@ -65,22 +65,19 @@ public abstract class AbstractScraper<T extends ComponentEntity> {
 
     protected List<String> getComponentRelativeUris(String basePageUri)  {
         List<String> result = new ArrayList<>();
-//        Document doc = getPage(basePageUri);
-//        int pageCount = getPageCount(doc);
-//        System.out.println("Page count: " + pageCount);
-//
-//        List<String> urisFromPage = getItemUrisFromPage(doc);
-//        System.out.println("Page #1: " + urisFromPage.size());
-//        result.addAll(urisFromPage);
-//        for (int i = 2; i <= pageCount; i++) {
-//            doc = getPage(basePageUri + "?" + pageQueryParam + "=" + i);
-//            urisFromPage = getItemUrisFromPage(doc);
-//            System.out.println("Page #" + i + ": " + urisFromPage.size());
-//            result.addAll(urisFromPage);
-//        }
+        Document doc = getPage(basePageUri);
+        int pageCount = getPageCount(doc);
+        System.out.println("Page count: " + pageCount);
 
-        result.add("/offer/materinskaya-plata-asrock-a620m-hdv-m-2-plus-am5/");
-//        result.add("/offer/materinskaya-plata-asrock-d1800m/");
+        List<String> urisFromPage = getItemUrisFromPage(doc);
+        System.out.println("Page #1: " + urisFromPage.size());
+        result.addAll(urisFromPage);
+        for (int i = 2; i <= pageCount; i++) {
+            doc = getPage(basePageUri + "?" + pageQueryParam + "=" + i);
+            urisFromPage = getItemUrisFromPage(doc);
+            System.out.println("Page #" + i + ": " + urisFromPage.size());
+            result.addAll(urisFromPage);
+        }
 
         return result;
     }

@@ -7,6 +7,7 @@ import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.repository.MotherboardRepository;
 import kz.iitu.pcsystem.scraper.shopkz.MotherboardShopKzScraper;
 import kz.iitu.pcsystem.util.FileDownloader;
+import kz.iitu.pcsystem.util.Util;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.PageRequest;
@@ -33,29 +34,25 @@ public class MotherboardScrapingManager {
             motherboard.addProduct(product);
 
             byte[] image = FileDownloader.download(motherboard.getImageUri()); // at this point it is shop.kz uri
-            motherboard.setImage(image);
+
+            Util.serveComponentImage(motherboard, image);
 
             motherboardRepository.save(motherboard);
         }
 
-        List<ComponentProduct<Motherboard>> motherboardProductsOfSecondaryStores = new ArrayList<>();
+//        List<ComponentProduct<Motherboard>> motherboardProductsOfSecondaryStores = new ArrayList<>();
 //        motherboardProductsOfSecondaryStores.addAll(motherboardProductsTechnodom);
 //        motherboardProductsOfSecondaryStores.addAll(motherboardProductsDnsShop);
 //        motherboardProductsOfSecondaryStores.addAll(motherboardProductsTechplaza);
-        saveCpuProductsOfSecondaryStores(motherboardProductsOfSecondaryStores);
+//        saveCpuProductsOfSecondaryStores(motherboardProductsOfSecondaryStores);
 
         List<Motherboard> motherboards = motherboardRepository.findAllSortedByProductCountDesc(PageRequest.of(0, 20)).getContent();
         for (Motherboard motherboard : motherboards) {
             System.out.println(motherboard);
         }
-
-        List<Motherboard> motherboardsAll = motherboardRepository.findAllWithImage();
-        for (ComponentEntity component : motherboardsAll) {
-            serveComponentImage(component);
-        }
     }
 
-    public static void serveComponentImage(ComponentEntity component) {
+    public static void serveComponentImage(ComponentEntity component, byte[] image) {
         System.out.println(component.getImageUri());
         if (!component.getImageUri().contains("shop.kz")) {
             System.out.println("continue");
@@ -68,7 +65,7 @@ public class MotherboardScrapingManager {
         String motherboardImagePath = "src/main/resources/static/images/" + component.getId().replaceAll("\\s", "_") +
                 "." + FilenameUtils.getExtension(component.getImageUri());
         try (FileOutputStream fos = new FileOutputStream(motherboardImagePath)) {
-            fos.write(component.getImage());
+            fos.write(image);
         } catch (IOException e) {
             throw new RuntimeException("Could not write file to " + motherboardImagePath);
         }

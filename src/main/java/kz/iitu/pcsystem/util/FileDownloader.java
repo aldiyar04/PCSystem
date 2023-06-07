@@ -6,6 +6,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 public class FileDownloader {
     public static byte[] download(String uri) {
+        if (!uri.startsWith("https://")) {
+            uri = "https://" + uri;
+        }
         ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
                 .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024)) // Set buffer size to 10MB
                 .build();

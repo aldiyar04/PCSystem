@@ -15,8 +15,4 @@ public interface MotherboardRepository extends JpaRepository<Motherboard, String
     @Transactional
     @Query("SELECT c FROM Motherboard c LEFT JOIN c.products p GROUP BY c.id ORDER BY COUNT(p) DESC")
     Page<Motherboard> findAllSortedByProductCountDesc(Pageable pageable);
-
-    @Transactional
-    @Query("SELECT c FROM Motherboard c JOIN FETCH c.image")
-    List<Motherboard> findAllWithImage();
 }

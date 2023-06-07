@@ -13,7 +13,4 @@ import java.util.List;
 public interface CPURepository extends JpaRepository<CPU, String> {
     @Query("SELECT c FROM CPU c LEFT JOIN c.products p GROUP BY c.id ORDER BY COUNT(p) DESC")
     Page<CPU> findAllSortedByProductCountDesc(Pageable pageable);
-
-    @Query("SELECT c FROM CPU c JOIN FETCH c.image")
-    List<CPU> findAllWithImage();
 }

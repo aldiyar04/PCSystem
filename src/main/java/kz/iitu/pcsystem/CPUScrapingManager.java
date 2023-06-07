@@ -1,4 +1,4 @@
-package kz.iitu.pcsystem.util;
+package kz.iitu.pcsystem;
 
 import kz.iitu.pcsystem.entity.CPU;
 import kz.iitu.pcsystem.entity.ComponentEntity;
@@ -9,6 +9,8 @@ import kz.iitu.pcsystem.scraper.dnsshop.CPUDnsShopScraper;
 import kz.iitu.pcsystem.scraper.shopkz.CPUShopKzScraper;
 import kz.iitu.pcsystem.scraper.technodom.CPUTechnodomScraper;
 import kz.iitu.pcsystem.scraper.techplaza.CPUTechnplazaScraper;
+import kz.iitu.pcsystem.util.FileDownloader;
+import kz.iitu.pcsystem.util.Util;
 import lombok.AllArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +42,7 @@ public class CPUScrapingManager {
             cpu.addProduct(product);
 
             byte[] image = FileDownloader.download(cpu.getImageUri()); // at this point it is shop.kz uri
-            cpu.setImage(image);
+            Util.serveComponentImage(cpu, image);
 
             cpuRepository.save(cpu);
         }
@@ -55,33 +57,9 @@ public class CPUScrapingManager {
         for (CPU cpu : cpus) {
             System.out.println(cpu);
         }
-
-        List<CPU> cpusAll = cpuRepository.findAllWithImage();
-        for (ComponentEntity component : cpusAll) {
-            serveComponentImage(component);
-        }
     }
 
-    public static void serveComponentImage(ComponentEntity component) {
-        System.out.println(component.getImageUri());
-        if (!component.getImageUri().contains("shop.kz")) {
-            System.out.println("continue");
-            // already saved to resource folder and imageUri is ours
-            return;
-        }
 
-        System.out.println("serving image");
-
-        String cpuImagePath = "src/main/resources/static/images/" + component.getId().replaceAll("\\s", "_") +
-                "." + FilenameUtils.getExtension(component.getImageUri());
-        try (FileOutputStream fos = new FileOutputStream(cpuImagePath)) {
-            fos.write(component.getImage());
-        } catch (IOException e) {
-            throw new RuntimeException("Could not write file to " + cpuImagePath);
-        }
-
-        component.setImageUri("/static/images/" + component.getId()); // update shop.kz image uri to ours
-    }
 
     private void saveCpuProductsOfSecondaryStores(List<ComponentProduct<CPU>> cpuProducts) {
         for (ComponentProduct<CPU> cpuProduct : cpuProducts) {
