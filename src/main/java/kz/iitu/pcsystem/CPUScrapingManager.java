@@ -27,10 +27,11 @@ public class CPUScrapingManager {
     private final CPURepository cpuRepository;
 
     public void scrape() {
+        System.out.println("WTF FFFFFFFFFFFFFFF");
         List<ComponentProduct<CPU>> cpuProductsTechnodom = cpuTechndomScraper.scrape();
         List<ComponentProduct<CPU>> cpuProductsTechplaza = cpuTechplazaScraper.scrape();
         List<ComponentProduct<CPU>> cpuProductsShopKz = cpuShopKzScraper.scrape();
-        List<ComponentProduct<CPU>> cpuProductsDnsShop = cpuDnsShopScraper.scrape();
+//        List<ComponentProduct<CPU>> cpuProductsDnsShop = cpuDnsShopScraper.scrape();
 
         for (ComponentProduct<CPU> cpuProduct : cpuProductsShopKz) {
             Product product = cpuProduct.getProduct();
@@ -50,7 +51,7 @@ public class CPUScrapingManager {
 
         List<ComponentProduct<CPU>> cpuProductsOfSecondaryStores = new ArrayList<>();
         cpuProductsOfSecondaryStores.addAll(cpuProductsTechnodom);
-        cpuProductsOfSecondaryStores.addAll(cpuProductsDnsShop);
+//        cpuProductsOfSecondaryStores.addAll(cpuProductsDnsShop);
         cpuProductsOfSecondaryStores.addAll(cpuProductsTechplaza);
         saveCpuProductsOfSecondaryStores(cpuProductsOfSecondaryStores);
 
