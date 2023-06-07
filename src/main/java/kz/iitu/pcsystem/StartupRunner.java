@@ -25,18 +25,6 @@ public class StartupRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-//        motherboardScrapingManager.scrape();
-    }
-
-    private void search(String search) {
-        CustomSpecificationsBuilder<CPU> builder = new CustomSpecificationsBuilder<>();
-        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?);;;", Pattern.UNICODE_CHARACTER_CLASS);
-        Matcher matcher = pattern.matcher(search + ",");
-        while (matcher.find()) {
-            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-        }
-
-        Specification<CPU> spec = builder.build();
-//        return cpuRepository.findAll(spec);
+        motherboardScrapingManager.scrape();
     }
 }

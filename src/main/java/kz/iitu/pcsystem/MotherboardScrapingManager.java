@@ -8,10 +8,7 @@ import kz.iitu.pcsystem.scraper.shopkz.MotherboardShopKzScraper;
 import kz.iitu.pcsystem.util.FileDownloader;
 import kz.iitu.pcsystem.util.Util;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -31,7 +28,7 @@ public class MotherboardScrapingManager {
             Motherboard motherboard = motherboardComponentProduct.getComponent();
             motherboard.addProduct(product);
 
-            Optional<Motherboard> motherboardOptional = motherboardRepository.findById(motherboard.getId());
+            Optional<Motherboard> motherboardOptional = motherboardRepository.findByCustomId(motherboard.getId());
             if (motherboardOptional.isPresent()) {
                 continue;
             }
@@ -39,6 +36,8 @@ public class MotherboardScrapingManager {
             byte[] image = FileDownloader.download(motherboard.getImageUri()); // at this point it is shop.kz uri
 
             Util.serveComponentImage(motherboard, image);
+
+            System.out.println("MOTHERBOARD: " + motherboard.getIid() + " " + motherboard.getId());
 
             motherboardRepository.save(motherboard);
         }
@@ -57,22 +56,6 @@ public class MotherboardScrapingManager {
                 System.out.println(product);
             }
             System.out.println();
-        }
-    }
-
-    private void saveMotherboardProductsOfSecondaryStores(List<ComponentProduct<Motherboard>> motherboardProducts) {
-        for (ComponentProduct<Motherboard> motherboardProduct : motherboardProducts) {
-            String componentId = motherboardProduct.getProduct().getComponentId();
-            if (componentId == null) {
-                throw new IllegalStateException("componentId may not be null");
-            }
-            Optional<Motherboard> motherboardOptional = motherboardRepository.findById(componentId);
-            if (motherboardOptional.isPresent()) {
-                Motherboard motherboard = motherboardOptional.get();
-                Product product = motherboardProduct.getProduct();
-                motherboard.addProduct(product);
-                motherboardRepository.save(motherboard);
-            }
         }
     }
 }

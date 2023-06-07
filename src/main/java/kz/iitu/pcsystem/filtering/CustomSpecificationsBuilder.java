@@ -41,7 +41,7 @@ public class CustomSpecificationsBuilder<T extends ComponentEntity> {
 
         Specification<T> specification = (root, query, builder) -> {
             Join<T, Product> productJoin = root.join("products", JoinType.LEFT);
-            query.groupBy(root.get("id"));
+            query.groupBy(root.get("iid"));
             query.orderBy(builder.desc(builder.count(productJoin)));
             return null; // The actual predicate is not needed for this query
         };

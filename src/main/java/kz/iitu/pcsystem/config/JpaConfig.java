@@ -47,7 +47,7 @@ public class JpaConfig {
     private Properties hibernateProperties() {
         Properties props = new Properties();
 
-        props.put("hibernate.hbm2ddl.auto", "update");
+        props.put("hibernate.hbm2ddl.auto", "create");
 
         // Caching
 //        props.put("hibernate.cache.use_second_level_cache", true);

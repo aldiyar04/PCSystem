@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class MemoryScrapingManager {
             Memory memory = memoryComponentProduct.getComponent();
             memory.addProduct(product);
 
-            Optional<Memory> memoryOptional = memoryRepository.findById(memory.getId());
+            Optional<Memory> memoryOptional = memoryRepository.findById(memory.getIid());
             if (memoryOptional.isPresent()) {
                 continue;
             }
@@ -53,22 +54,6 @@ public class MemoryScrapingManager {
                 System.out.println(product);
             }
             System.out.println();
-        }
-    }
-
-    private void saveMemoryProductsOfSecondaryStores(List<ComponentProduct<Memory>> memoryProducts) {
-        for (ComponentProduct<Memory> memoryProduct : memoryProducts) {
-            String componentId = memoryProduct.getProduct().getComponentId();
-            if (componentId == null) {
-                throw new IllegalStateException("componentId may not be null");
-            }
-            Optional<Memory> memoryOptional = memoryRepository.findById(componentId);
-            if (memoryOptional.isPresent()) {
-                Memory memory = memoryOptional.get();
-                Product product = memoryProduct.getProduct();
-                memory.addProduct(product);
-                memoryRepository.save(memory);
-            }
         }
     }
 }

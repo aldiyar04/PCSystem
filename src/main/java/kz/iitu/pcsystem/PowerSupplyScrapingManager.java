@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class PowerSupplyScrapingManager {
             PowerSupply powerSupply = powerSupplyComponentProduct.getComponent();
             powerSupply.addProduct(product);
 
-            Optional<PowerSupply> powerSupplyOptional = powerSupplyRepository.findById(powerSupply.getId());
+            Optional<PowerSupply> powerSupplyOptional = powerSupplyRepository.findById(powerSupply.getIid());
             if (powerSupplyOptional.isPresent()) {
                 continue;
             }
@@ -53,22 +54,6 @@ public class PowerSupplyScrapingManager {
                 System.out.println(product);
             }
             System.out.println();
-        }
-    }
-
-    private void savePowerSupplyProductsOfSecondaryStores(List<ComponentProduct<PowerSupply>> powerSupplyProducts) {
-        for (ComponentProduct<PowerSupply> powerSupplyProduct : powerSupplyProducts) {
-            String componentId = powerSupplyProduct.getProduct().getComponentId();
-            if (componentId == null) {
-                throw new IllegalStateException("componentId may not be null");
-            }
-            Optional<PowerSupply> powerSupplyOptional = powerSupplyRepository.findById(componentId);
-            if (powerSupplyOptional.isPresent()) {
-                PowerSupply powerSupply = powerSupplyOptional.get();
-                Product product = powerSupplyProduct.getProduct();
-                powerSupply.addProduct(product);
-                powerSupplyRepository.save(powerSupply);
-            }
         }
     }
 }

@@ -43,7 +43,7 @@ public class Motherboard extends ComponentEntity {
     @Column
     private Integer memorySlotCount;
 
-    @Column
+    @Column(columnDefinition = "text")
     @Lob
     private String supportedMemoryTypes; // map from website in same format as CPU
 

@@ -1,5 +1,6 @@
 package kz.iitu.pcsystem;
 
+import kz.iitu.pcsystem.entity.Case;
 import kz.iitu.pcsystem.entity.Product;
 import kz.iitu.pcsystem.entity.VideoCard;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -27,6 +29,11 @@ public class VideoCardScrapingManager {
             Product product = videoCardComponentProduct.getProduct();
             VideoCard videoCard = videoCardComponentProduct.getComponent();
             videoCard.addProduct(product);
+
+            Optional<VideoCard> videoCardOptional = videoCardRepository.findById(videoCard.getIid());
+            if (videoCardOptional.isPresent()) {
+                continue;
+            }
 
             byte[] image = FileDownloader.download(videoCard.getImageUri()); // at this point it is shop.kz uri
 
@@ -48,22 +55,6 @@ public class VideoCardScrapingManager {
                 System.out.println(product);
             }
             System.out.println();
-        }
-    }
-
-    private void saveVideoCardProductsOfSecondaryStores(List<ComponentProduct<VideoCard>> videoCardProducts) {
-        for (ComponentProduct<VideoCard> videoCardProduct : videoCardProducts) {
-            String componentId = videoCardProduct.getProduct().getComponentId();
-            if (componentId == null) {
-                throw new IllegalStateException("componentId may not be null");
-            }
-            Optional<VideoCard> videoCardOptional = videoCardRepository.findById(componentId);
-            if (videoCardOptional.isPresent()) {
-                VideoCard videoCard = videoCardOptional.get();
-                Product product = videoCardProduct.getProduct();
-                videoCard.addProduct(product);
-                videoCardRepository.save(videoCard);
-            }
         }
     }
 }
