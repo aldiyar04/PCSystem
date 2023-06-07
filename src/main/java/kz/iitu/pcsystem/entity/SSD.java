@@ -16,7 +16,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SSD extends Component {
+public class SSD extends ComponentEntity {
     private String manufacturer;
     private String model;
     private String formFactor;

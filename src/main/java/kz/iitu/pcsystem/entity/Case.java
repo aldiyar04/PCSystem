@@ -2,6 +2,7 @@ package kz.iitu.pcsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
+@Table(name = "casee")
 
 @SuperBuilder
 @NoArgsConstructor
@@ -17,7 +19,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Case extends Component {
+public class Case extends ComponentEntity {
     private BigDecimal height;
     private BigDecimal width;
     private BigDecimal length;

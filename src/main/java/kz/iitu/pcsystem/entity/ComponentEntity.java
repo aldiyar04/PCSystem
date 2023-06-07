@@ -16,7 +16,7 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @Data
-public abstract class Component {
+public abstract class ComponentEntity {
     @Id
     @Setter(AccessLevel.PACKAGE)
     private String id;

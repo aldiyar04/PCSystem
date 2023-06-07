@@ -1,6 +1,6 @@
 package kz.iitu.pcsystem.scraper.technodom;
 
-import kz.iitu.pcsystem.entity.Component;
+import kz.iitu.pcsystem.entity.ComponentEntity;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.scraper.SecondaryStoreScraper;
 import kz.iitu.pcsystem.util.WebDriverUtil;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @org.springframework.stereotype.Component
-public abstract class TechnodomScraper<T extends Component> extends SecondaryStoreScraper<T> {
+public abstract class TechnodomScraper<T extends ComponentEntity> extends SecondaryStoreScraper<T> {
     private static final String BASE_URI = "https://www.technodom.kz";
     private static final String COMPONENTS_BASE_URI = "https://www.technodom.kz/catalog/noutbuki-i-komp-jutery/komplektujuschie/";
     @Autowired
@@ -112,6 +112,7 @@ public abstract class TechnodomScraper<T extends Component> extends SecondarySto
 
     @Override
     protected Document getPage(String uri) {
+        System.out.println("URI: " + uri);
         driver.get(uri);
         driverUtil.waitForPageLoad();
         driverUtil.scrollToPageBottom();

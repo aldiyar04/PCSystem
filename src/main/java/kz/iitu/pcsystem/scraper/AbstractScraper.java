@@ -1,10 +1,9 @@
 package kz.iitu.pcsystem.scraper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kz.iitu.pcsystem.entity.Component;
+import kz.iitu.pcsystem.entity.ComponentEntity;
 import kz.iitu.pcsystem.entity.Product;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
-import kz.iitu.pcsystem.util.FileDownloader;
 import kz.iitu.pcsystem.util.WebDriverUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,15 +11,12 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractScraper<T extends Component> {
+public abstract class AbstractScraper<T extends ComponentEntity> {
     private final String pageQueryParam;
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
@@ -69,19 +65,22 @@ public abstract class AbstractScraper<T extends Component> {
 
     protected List<String> getComponentRelativeUris(String basePageUri)  {
         List<String> result = new ArrayList<>();
-        Document doc = getPage(basePageUri);
-        int pageCount = getPageCount(doc);
-        System.out.println("Page count: " + pageCount);
+//        Document doc = getPage(basePageUri);
+//        int pageCount = getPageCount(doc);
+//        System.out.println("Page count: " + pageCount);
+//
+//        List<String> urisFromPage = getItemUrisFromPage(doc);
+//        System.out.println("Page #1: " + urisFromPage.size());
+//        result.addAll(urisFromPage);
+//        for (int i = 2; i <= pageCount; i++) {
+//            doc = getPage(basePageUri + "?" + pageQueryParam + "=" + i);
+//            urisFromPage = getItemUrisFromPage(doc);
+//            System.out.println("Page #" + i + ": " + urisFromPage.size());
+//            result.addAll(urisFromPage);
+//        }
 
-        List<String> urisFromPage = getItemUrisFromPage(doc);
-        System.out.println("Page #1: " + urisFromPage.size());
-        result.addAll(urisFromPage);
-        for (int i = 2; i <= pageCount; i++) {
-            doc = getPage(basePageUri + "?" + pageQueryParam + "=" + i);
-            urisFromPage = getItemUrisFromPage(doc);
-            System.out.println("Page #" + i + ": " + urisFromPage.size());
-            result.addAll(urisFromPage);
-        }
+        result.add("/offer/materinskaya-plata-asrock-a620m-hdv-m-2-plus-am5/");
+//        result.add("/offer/materinskaya-plata-asrock-d1800m/");
 
         return result;
     }
@@ -112,6 +111,8 @@ public abstract class AbstractScraper<T extends Component> {
         }
 
         result.put("uri", getCurrentUri(uri));
+
+        result.forEach((key, val) -> System.out.println(key + " " + val));
 
         return result;
     }

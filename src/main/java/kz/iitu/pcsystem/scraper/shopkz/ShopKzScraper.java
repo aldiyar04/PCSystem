@@ -1,7 +1,7 @@
 package kz.iitu.pcsystem.scraper.shopkz;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kz.iitu.pcsystem.entity.Component;
+import kz.iitu.pcsystem.entity.ComponentEntity;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.scraper.AbstractScraper;
 import kz.iitu.pcsystem.util.WebDriverUtil;
@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @org.springframework.stereotype.Component
-public abstract class ShopKzScraper<T extends Component> extends AbstractScraper<T> {
+public abstract class ShopKzScraper<T extends ComponentEntity> extends AbstractScraper<T> {
     public static final String BASE_URI = "https://shop.kz";
     private static final String COMPONENTS_BASE_URI = "https://shop.kz/";
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -73,7 +74,8 @@ public abstract class ShopKzScraper<T extends Component> extends AbstractScraper
         }
 
         if ("цена".equals(characteristicName)) {
-            String price = doc.select(".item_current_price:containsOwn(₸)").first().text();
+            String price = driverUtil.waitForElementPresence(By.className("item_current_price")).getText();
+//            String price = doc.select(".item_current_price:containsOwn(₸)").first().text();
             price = price.replaceAll("\\s", "");
             return price.substring(0, price.indexOf("₸"));
         } else if ("в наличии".equals(characteristicName)) {
@@ -81,13 +83,19 @@ public abstract class ShopKzScraper<T extends Component> extends AbstractScraper
         }
 
         Element characteristicNameElem = doc.select("span:matchesOwn(^" + characteristicName + "$)").first();
-        if (characteristicNameElem == null) return null;
+        if (characteristicNameElem == null) {
+            System.out.println(characteristicName + " : " + null);
+            return null;
+        }
         Element characteristicValueElem = characteristicNameElem.parent().nextElementSibling();
-        return characteristicValueElem.text();
+        String value = characteristicValueElem.text();
+        System.out.println(characteristicName + " : " + value);
+        return value;
     }
 
     @Override
     protected Document getPage(String uri) {
+        System.out.println("URI: " + uri);
         driver.get(uri);
         driverUtil.waitForPageLoad();
         String html = driverUtil.getCurrentHtml();

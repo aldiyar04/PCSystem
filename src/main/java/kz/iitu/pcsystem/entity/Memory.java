@@ -1,11 +1,13 @@
 package kz.iitu.pcsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import java.util.UUID;
 
 @Entity
 
@@ -16,32 +18,36 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Memory extends Component {
-    private String productUID;
+public class Memory extends ComponentEntity {
+    @Column(nullable = false)
     private String manufacturer;
-    private String model;
-    private String packaging;
-    private String series;
-    private String formFactor;
-    private String amount;
-    private String configuration;
-    private String clockFrequency;
-    private String throughput;
-    private String ports;
-    private String moduleCount;
+
+    @Column(nullable = false, name = "memory_type")
     private String memoryType;
-    private String casLatency;
-    private String memoryTimingScheme;
-    private String rasToCasDelay;
-    private String rowPrechargeDelay;
-    private String isXmpSupported;
+
+    @Column(nullable = false, name = "memory_size")
+    private String memorySize;
+
+    @Column(name = "memory_frequency")
+    private String memoryFrequency;
+
+    @Column(name = "memory_bandwidth")
+    private String memoryBandwidth;
+
+    @Column
     private String voltage;
-    private String isRgbBacklight;
-    private String isCoolingRadiator;
-    private String backlightSync;
+
+    @Column
+    private String timings;
+
+    @Column
+    private String features;
+
+    @Column
+    private String height;
 
     @Override
     public void setId() {
-        setId(UUID.randomUUID().toString());
+        setId(manufacturer + " " + memoryType + " " + memorySize);
     }
 }

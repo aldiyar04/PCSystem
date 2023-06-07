@@ -6,7 +6,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Entity
 
@@ -17,7 +16,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CPU extends Component {
+public class CPU extends ComponentEntity {
     @Column(nullable = false)
     private String manufacturer;
 

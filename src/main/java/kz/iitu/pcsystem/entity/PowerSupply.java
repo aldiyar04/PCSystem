@@ -17,7 +17,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PowerSupply extends Component {
+public class PowerSupply extends ComponentEntity {
     private BigDecimal height;
     private BigDecimal width;
     private BigDecimal length;

@@ -1,6 +1,6 @@
 package kz.iitu.pcsystem.scraper.techplaza;
 
-import kz.iitu.pcsystem.entity.Component;
+import kz.iitu.pcsystem.entity.ComponentEntity;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.scraper.SecondaryStoreScraper;
 import kz.iitu.pcsystem.util.WebDriverUtil;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @org.springframework.stereotype.Component
-public abstract class TechplazaScraper<T extends Component> extends SecondaryStoreScraper<T> {
+public abstract class TechplazaScraper<T extends ComponentEntity> extends SecondaryStoreScraper<T> {
     private static final String COMPONENTS_BASE_URI = "https://techplaza.kz/Komplektujushhie/";
     @Autowired
     private WebDriver driver;
@@ -83,6 +83,7 @@ public abstract class TechplazaScraper<T extends Component> extends SecondarySto
 
     @Override
     protected Document getPage(String uri) {
+        System.out.println("URI: " + uri);
         driver.get(uri);
         driverUtil.waitForPageLoad();
         String html = driverUtil.getCurrentHtml();

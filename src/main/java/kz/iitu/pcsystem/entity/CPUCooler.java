@@ -1,6 +1,7 @@
 package kz.iitu.pcsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -16,33 +17,69 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CPUCooler extends Component {
-    private String noiseLevel;
-    private String backlight;
-    private String mountType;
-    private String supportedSockets;
-    private String thermalPaste;
-    private String fanCount;
+public class CPUCooler extends ComponentEntity {
+    @Column(nullable = false)
+    private String manufacturer;
+
+    @Column(nullable = false)
+    private String model;
+
+    @Column
+    private String type;
+
+    @Column
+    private String socket;
+
+    @Column(name = "max_tdp")
+    private String maxTdp;
+
+    @Column
+    private String material;
+
+    @Column(name = "fan_diameter")
+    private String fanDiameter;
+
+    @Column(name = "min_rotation_speed")
+    private String minRotationSpeed;
+
+    @Column(name = "max_rotation_speed")
+    private String maxRotationSpeed;
+
+    @Column(name = "rotation_speed_adjustment")
+    private String rotationSpeedAdjustment;
+
+    @Column(name = "max_noise_level")
+    private String maxNoiseLevel;
+
+    @Column
     private String height;
-    private String width;
-    private String length;
-    private String weight;
-    private String voltage;
+
+    @Column
     private String connector;
-    private String tdp;
-    private String coolerHeight;
-    private String radiatorMaterial;
-    private String baseMaterial;
-    private String coolerDesign;
-    private String isRotationSpeedAdjustable;
-    private String fanBearingType;
-    private String cfm;
-    private String rotationalSpeed;
-    private String fanDimensions;
-    private String coolingSystemDesign;
+
+    @Column
+    private String airflow;
+
+    @Column(name = "bearing_type")
+    private String bearingType;
+
+    @Column(name = "heat_pipes_count")
+    private String heatPipesCount;
+
+    @Column(name = "power_consumption")
+    private String powerConsumption;
+
+    @Column(name = "power_voltage")
+    private String powerVoltage;
+
+    @Column
+    private String lighting;
+
+    @Column
+    private String dimensions;
 
     @Override
     public void setId() {
-        setId(UUID.randomUUID().toString());
+        setId(manufacturer + " " + model);
     }
 }

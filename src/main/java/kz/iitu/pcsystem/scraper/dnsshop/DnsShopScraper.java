@@ -1,6 +1,6 @@
 package kz.iitu.pcsystem.scraper.dnsshop;
 
-import kz.iitu.pcsystem.entity.Component;
+import kz.iitu.pcsystem.entity.ComponentEntity;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.scraper.SecondaryStoreScraper;
 import kz.iitu.pcsystem.util.WebDriverUtil;
@@ -10,16 +10,13 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
 @org.springframework.stereotype.Component
-public abstract class DnsShopScraper<T extends Component> extends SecondaryStoreScraper<T> {
+public abstract class DnsShopScraper<T extends ComponentEntity> extends SecondaryStoreScraper<T> {
     private static final String COMPONENTS_BASE_URI = "https://www.dns-shop.kz/catalog/";
     @Autowired
     private WebDriver driver;
@@ -117,7 +114,7 @@ public abstract class DnsShopScraper<T extends Component> extends SecondaryStore
     }
 
     private String printAndReturn(String bool) {
-        System.out.println("IS AVAILAVBLE: " + bool);
+        System.out.println("IS AVAILABLE: " + bool);
         return bool;
     }
 }

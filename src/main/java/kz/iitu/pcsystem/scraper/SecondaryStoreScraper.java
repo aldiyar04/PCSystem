@@ -1,12 +1,12 @@
 package kz.iitu.pcsystem.scraper;
 
-import kz.iitu.pcsystem.entity.Component;
+import kz.iitu.pcsystem.entity.ComponentEntity;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
 
 import java.util.List;
 import java.util.Map;
 
-public abstract class SecondaryStoreScraper<T extends Component> extends AbstractScraper<T> {
+public abstract class SecondaryStoreScraper<T extends ComponentEntity> extends AbstractScraper<T> {
     public SecondaryStoreScraper(String pageQueryParam) {
         super(pageQueryParam);
     }

@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
-import static kz.iitu.pcsystem.entity.Component.*;
+import static kz.iitu.pcsystem.entity.ComponentEntity.*;
 
 @Entity
 
@@ -29,7 +28,7 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "component_id")
-    private Component component;
+    private ComponentEntity component;
 
     @Column(nullable = false)
     private String componentType;
@@ -46,7 +45,7 @@ public class Product {
     @Transient
     private String componentId; // helper field, not for DB
 
-    public void setComponent(Component component) {
+    public void setComponent(ComponentEntity component) {
         if (component instanceof CPU) setComponentType(COMPONENT_TYPE_CPU);
         if (component instanceof Motherboard) setComponentType(COMPONENT_TYPE_MOTHERBOARD);
         if (component instanceof CPUCooler) setComponentType(COMPONENT_TYPE_CPU_COOLER);

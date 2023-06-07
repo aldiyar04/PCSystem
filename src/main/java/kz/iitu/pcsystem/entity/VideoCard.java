@@ -1,7 +1,9 @@
 package kz.iitu.pcsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -17,35 +19,58 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VideoCard extends Component {
-    private String productUID;
+public class VideoCard extends ComponentEntity {
+    @Column(nullable = false)
     private String manufacturer;
+
+    @Column(nullable = false)
+    private String model;
+
+    @Column(name = "gpu_manufacturer")
     private String gpuManufacturer;
-    private String technologies;
+
+    @Column(name = "gpu_series")
     private String gpuSeries;
-    private BigDecimal throughput;
-    private String ports;
-    private Integer maxMonitorCount;
-    private String rgb;
-    private String videoMemory;
+
+    @Column(name = "chipset_model")
+    private String chipsetModel;
+
+    @Column
+    @Lob
+    private String technologies;
+
+    @Column(name = "video_cpu_frequency")
+    private String videoCPUFrequency;
+
+    @Column(name = "video_memory_frequency")
+    private String videoMemoryFrequency;
+
+    @Column(name = "video_memory_type")
     private String videoMemoryType;
-    private String gpuModel;
-    private Integer lithography;
-    private Integer coreClock;
-    private Integer boostCoreClock;
-    private Integer shadingUnitCount;
-    private BigDecimal occupiedSlotCount;
-    private BigDecimal length;
-    private Integer recommendedWattage;
-    private String powerConnector;
-    private String wattageConsumption;
-    private String nvidia3VisionSupport;
-    private Boolean isPhysXSupported;
-    private String maxDisplayResolution;
-    private String generalPurposeGPUComputingSupport;
+
+    @Column(name = "video_memory_capacity")
+    private String videoMemoryCapacity;
+
+    @Column(name = "video_memory_bus_width")
+    private String videoMemoryBusWidth;
+
+    @Column(name = "memory_throughput")
+    private String memoryThroughput;
+
+    @Column(name = "connector_interface")
+    private String connectorInterface;
+
+    @Column(name = "power_supply_slots")
+    private String powerSupplySlots;
+
+    @Column(name = "min_power_supply_wattage")
+    private String minPowerSupplyWattage;
+
+    @Column
+    private String length;
 
     @Override
     public void setId() {
-        setId(UUID.randomUUID().toString());
+        setId(manufacturer + " " + model);
     }
 }
