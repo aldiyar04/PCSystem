@@ -75,7 +75,7 @@ public class CPU extends ComponentEntity {
     @Lob
     private String technologies;
 
-    @Column(columnDefinition = "text")
+    @Column
     @Lob
     private String instructions;
 

@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -33,12 +32,11 @@ public class MotherboardDto {
     private String bios;
     private BigDecimal length;
     private BigDecimal width;
-    private UUID id;
+    private String id;
     private BigDecimal price;
     private Boolean isAvailable;
     private String uri;
     private String imageUri;
-
 
     public static MotherboardDto fromEntities(Motherboard motherboardEntity, Product productEntity) {
         MotherboardDto motherboardDto = new MotherboardDto();
@@ -64,7 +62,7 @@ public class MotherboardDto {
         motherboardDto.setBios(motherboardEntity.getBios());
         motherboardDto.setLength(motherboardEntity.getLength());
         motherboardDto.setWidth(motherboardEntity.getWidth());
-        motherboardDto.setId(motherboardEntity.getIid());
+        motherboardDto.setId(productEntity.getComponent().getId());
         motherboardDto.setImageUri(motherboardEntity.getImageUri());
         motherboardDto.setPrice(productEntity.getPrice());
         motherboardDto.setIsAvailable(productEntity.getIsAvailable());

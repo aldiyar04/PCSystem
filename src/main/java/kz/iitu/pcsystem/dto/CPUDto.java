@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -32,7 +31,7 @@ public class CPUDto {
     private String technologies;
     private String instructions;
     private Integer criticalTemperature;
-    private UUID id;
+    private String id;
     private String imageUri;
     private BigDecimal price;
     private Boolean isAvailable;
@@ -63,7 +62,7 @@ public class CPUDto {
         dto.setTechnologies(cpuEntity.getTechnologies());
         dto.setInstructions(cpuEntity.getInstructions());
         dto.setCriticalTemperature(cpuEntity.getCriticalTemperature());
-        dto.setId(cpuEntity.getIid());
+        dto.setId(cpuEntity.getId());
         dto.setImageUri(cpuEntity.getImageUri());
 
         // Mapping Product entity fields to DTO

@@ -85,7 +85,7 @@ public abstract class AbstractScraper<T extends ComponentEntity> {
 //        }
 
         // CHANGE "BATCHES" ("PAGINATION") HERE:
-        result = result.subList(0, 1);
+        result = result.subList(0, 3);
 
         return result;
     }

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -29,7 +28,7 @@ public class SSDScrapingManager {
             SSD ssd = ssdComponentProduct.getComponent();
             ssd.addProduct(product);
 
-            Optional<SSD> ssdOptional = ssdRepository.findById(ssd.getIid());
+            Optional<SSD> ssdOptional = ssdRepository.findById(ssd.getId());
             if (ssdOptional.isPresent())
                 continue;
 
@@ -53,6 +52,22 @@ public class SSDScrapingManager {
                 System.out.println(product);
             }
             System.out.println();
+        }
+    }
+
+    private void saveSSDProductsOfSecondaryStores(List<ComponentProduct<SSD>> ssdProducts) {
+        for (ComponentProduct<SSD> ssdProduct : ssdProducts) {
+            String componentId = ssdProduct.getProduct().getComponentId();
+            if (componentId == null) {
+                throw new IllegalStateException("componentId may not be null");
+            }
+            Optional<SSD> ssdOptional = ssdRepository.findById(componentId);
+            if (ssdOptional.isPresent()) {
+                SSD ssd = ssdOptional.get();
+                Product product = ssdProduct.getProduct();
+                ssd.addProduct(product);
+                ssdRepository.save(ssd);
+            }
         }
     }
 }

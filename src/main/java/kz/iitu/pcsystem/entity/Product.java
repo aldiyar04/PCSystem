@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 import static kz.iitu.pcsystem.entity.ComponentEntity.*;
 
@@ -24,8 +23,8 @@ import static kz.iitu.pcsystem.entity.ComponentEntity.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Product {
     @Id
-    @Column(columnDefinition = "uuid")
-    private UUID iid = UUID.randomUUID();;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
     @ManyToOne
     @JoinColumn(name = "component_id", nullable = false)

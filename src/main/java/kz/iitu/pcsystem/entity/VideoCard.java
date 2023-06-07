@@ -35,7 +35,7 @@ public class VideoCard extends ComponentEntity {
     @Column(name = "chipset_model")
     private String chipsetModel;
 
-    @Column(columnDefinition = "text")
+    @Column
     @Lob
     private String technologies;
 

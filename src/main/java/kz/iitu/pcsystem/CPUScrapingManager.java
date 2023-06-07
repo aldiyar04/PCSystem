@@ -16,7 +16,6 @@ import org.springframework.data.domain.PageRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @org.springframework.stereotype.Component
 @AllArgsConstructor
@@ -38,7 +37,7 @@ public class CPUScrapingManager {
             CPU cpu = cpuProduct.getComponent();
             cpu.addProduct(product);
 
-            Optional<CPU> cpuOptional = cpuRepository.findById(cpu.getIid());
+            Optional<CPU> cpuOptional = cpuRepository.findById(cpu.getId());
             if (cpuOptional.isPresent()) {
                 continue;
             }
@@ -69,7 +68,7 @@ public class CPUScrapingManager {
 
     private void saveCpuProductsOfSecondaryStores(List<ComponentProduct<CPU>> cpuProducts) {
         for (ComponentProduct<CPU> cpuProduct : cpuProducts) {
-            UUID componentId = cpuProduct.getComponent().getIid();
+            String componentId = cpuProduct.getProduct().getComponentId();
             if (componentId == null) {
                 throw new IllegalStateException("componentId may not be null");
             }

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @AllArgsConstructor
@@ -29,12 +28,12 @@ public class CaseScrapingManager {
             Case computerCase = caseComponentProduct.getComponent();
             computerCase.addProduct(product);
 
-            Optional<Case> caseOptional = caseRepository.findById(computerCase.getIid());
+            Optional<Case> caseOptional = caseRepository.findById(computerCase.getId());
             if (caseOptional.isPresent()) {
                 continue;
             }
 
-            byte[] image = FileDownloader.download(computerCase.getImageUri()); // at this point it is shop.kz uri
+                byte[] image = FileDownloader.download(computerCase.getImageUri()); // at this point it is shop.kz uri
 
             Util.serveComponentImage(computerCase, image);
 
@@ -54,6 +53,22 @@ public class CaseScrapingManager {
                 System.out.println(product);
             }
             System.out.println();
+        }
+    }
+
+    private void saveCaseProductsOfSecondaryStores(List<ComponentProduct<Case>> caseProducts) {
+        for (ComponentProduct<Case> caseProduct : caseProducts) {
+            String componentId = caseProduct.getProduct().getComponentId();
+            if (componentId == null) {
+                throw new IllegalStateException("componentId may not be null");
+            }
+            Optional<Case> caseOptional = caseRepository.findById(componentId);
+            if (caseOptional.isPresent()) {
+                Case computerCase = caseOptional.get();
+                Product product = caseProduct.getProduct();
+                computerCase.addProduct(product);
+                caseRepository.save(computerCase);
+            }
         }
     }
 }
