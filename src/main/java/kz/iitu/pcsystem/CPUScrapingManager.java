@@ -1,7 +1,6 @@
 package kz.iitu.pcsystem;
 
 import kz.iitu.pcsystem.entity.CPU;
-import kz.iitu.pcsystem.entity.ComponentEntity;
 import kz.iitu.pcsystem.entity.Product;
 import kz.iitu.pcsystem.pojo.ComponentProduct;
 import kz.iitu.pcsystem.repository.CPURepository;
@@ -12,11 +11,8 @@ import kz.iitu.pcsystem.scraper.techplaza.CPUTechnplazaScraper;
 import kz.iitu.pcsystem.util.FileDownloader;
 import kz.iitu.pcsystem.util.Util;
 import lombok.AllArgsConstructor;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.data.domain.PageRequest;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +37,11 @@ public class CPUScrapingManager {
             CPU cpu = cpuProduct.getComponent();
             cpu.addProduct(product);
 
+            Optional<CPU> cpuOptional = cpuRepository.findById(cpu.getId());
+            if (cpuOptional.isPresent()) {
+                continue;
+            }
+
             byte[] image = FileDownloader.download(cpu.getImageUri()); // at this point it is shop.kz uri
             Util.serveComponentImage(cpu, image);
 
@@ -53,9 +54,13 @@ public class CPUScrapingManager {
         cpuProductsOfSecondaryStores.addAll(cpuProductsTechplaza);
         saveCpuProductsOfSecondaryStores(cpuProductsOfSecondaryStores);
 
-        List<CPU> cpus = cpuRepository.findAllSortedByProductCountDesc(PageRequest.of(0, 20)).getContent();
+        List<CPU> cpus = cpuRepository.findAllWithMinPriceProductAndTwoOrMoreProducts(PageRequest.of(0, 20)).getContent();
         for (CPU cpu : cpus) {
             System.out.println(cpu);
+            for (Product product : cpu.getProducts()) {
+                System.out.println(product);
+            }
+            System.out.println();
         }
     }
 

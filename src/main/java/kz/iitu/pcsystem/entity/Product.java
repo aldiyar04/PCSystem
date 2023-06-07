@@ -27,7 +27,7 @@ public class Product {
     Long id;
 
     @ManyToOne
-    @JoinColumn(name = "component_id")
+    @JoinColumn(name = "component_id", nullable = false)
     private ComponentEntity component;
 
     @Column(nullable = false)
@@ -46,6 +46,8 @@ public class Product {
     private String componentId; // helper field, not for DB
 
     public void setComponent(ComponentEntity component) {
+        this.component = component;
+
         if (component instanceof CPU) setComponentType(COMPONENT_TYPE_CPU);
         if (component instanceof Motherboard) setComponentType(COMPONENT_TYPE_MOTHERBOARD);
         if (component instanceof CPUCooler) setComponentType(COMPONENT_TYPE_CPU_COOLER);
@@ -54,5 +56,6 @@ public class Product {
         if (component instanceof SSD) setComponentType(COMPONENT_TYPE_SSD);
         if (component instanceof HDD) setComponentType(COMPONENT_TYPE_HDD);
         if (component instanceof PowerSupply) setComponentType(COMPONENT_TYPE_POWER_SUPPLY);
+        if (component instanceof Case) setComponentType(COMPONENT_TYPE_CASE);
     }
 }

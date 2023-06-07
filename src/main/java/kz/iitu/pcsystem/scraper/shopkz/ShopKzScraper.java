@@ -11,6 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -74,11 +75,19 @@ public abstract class ShopKzScraper<T extends ComponentEntity> extends AbstractS
         }
 
         if ("цена".equals(characteristicName)) {
+            List<WebElement> notAvailable = driver.findElements(By.xpath("//span[contains(text(), 'этот товар закончился')]"));
+            if (!notAvailable.isEmpty())
+                return null;
+
             String price = driverUtil.waitForElementPresence(By.className("item_current_price")).getText();
 //            String price = doc.select(".item_current_price:containsOwn(₸)").first().text();
             price = price.replaceAll("\\s", "");
             return price.substring(0, price.indexOf("₸"));
         } else if ("в наличии".equals(characteristicName)) {
+            List<WebElement> notAvailable = driver.findElements(By.xpath("//span[contains(text(), 'этот товар закончился')]"));
+            if (!notAvailable.isEmpty())
+                return "false";
+
             return "true";
         }
 

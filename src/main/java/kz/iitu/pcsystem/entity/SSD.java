@@ -1,6 +1,7 @@
 package kz.iitu.pcsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -17,27 +18,38 @@ import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SSD extends ComponentEntity {
+    @Column(nullable = false)
     private String manufacturer;
+
+    @Column(nullable = false)
     private String model;
+
+    @Column(name = "form_factor")
     private String formFactor;
-    private String series;
-    private String chipType;
-    private String capacity;
-    private String writeSpeed;
-    private String readSpeed;
-    private String interfaceThroughput;
-    private String pcieVersion;
-    private String height;
-    private String width;
-    private String length;
-    private String noiseLevel;
-    private String workingTemperature;
-    private String meanTimeBetweenFailures;
-    private String idleEnergyConsumption;
-    private String activeEnergyConsumption;
+
+    @Column(name = "interface_type")
+    private String interfaceType;
+
+    @Column(name = "capacity_gb")
+    private String capacityGB;
+
+    @Column
+    private String tbw;
+
+    @Column(name = "read_speed_mbps")
+    private String readSpeedMBps;
+
+    @Column(name = "write_speed_mbps")
+    private String writeSpeedMBps;
+
+    @Column
+    private String mtbf;
+
+    @Column
+    private String dimensions;
 
     @Override
     public void setId() {
-        setId(UUID.randomUUID().toString());
+        setId(manufacturer + " " + model);
     }
 }

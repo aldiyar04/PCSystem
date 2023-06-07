@@ -21,7 +21,7 @@ public abstract class ComponentEntity {
     @Setter(AccessLevel.PACKAGE)
     private String id;
 
-    @OneToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy = "component")
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, mappedBy = "component")
     private List<Product> products = new ArrayList<>();
 
     @Column(nullable = false)
@@ -36,6 +36,7 @@ public abstract class ComponentEntity {
 
     public void addProduct(Product product) {
         product.setComponent(this);
+        System.out.println("PRODUCT: " + product);
         products.add(product);
     }
 
@@ -47,4 +48,5 @@ public abstract class ComponentEntity {
     public static final String COMPONENT_TYPE_SSD = "SSD";
     public static final String COMPONENT_TYPE_HDD = "HDD";
     public static final String COMPONENT_TYPE_POWER_SUPPLY = "POWER_SUPPLY";
+    public static final String COMPONENT_TYPE_CASE = "CASEE";
 }

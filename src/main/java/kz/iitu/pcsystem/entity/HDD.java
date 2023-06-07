@@ -1,6 +1,7 @@
 package kz.iitu.pcsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -18,27 +19,53 @@ import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class HDD extends ComponentEntity {
-    private BigDecimal height;
-    private BigDecimal width;
-    private BigDecimal length;
-    private BigDecimal weight;
-    private String capacity;
-    private String formFactor;
-    private String spindleSpeed;
-    private String series;
-    private String type;
+    @Column(nullable = false)
+    private String manufacturer;
+
+    @Column(nullable = false)
     private String model;
-    private String interfacee;
-    private String purpose;
+
+    @Column(name = "device_type")
+    private String deviceType;
+
+    @Column
+    private String line;
+
+    @Column(name = "form_factor")
+    private String formFactor;
+
+    @Column(name = "interface_type")
+    private String interfaceType;
+
+    @Column(name = "interface_speed_gbps")
+    private String interfaceSpeedGbps;
+
+    @Column(name = "capacity_gb")
+    private String capacityGB;
+
+    @Column(name = "buffer_mb")
+    private String bufferMB;
+
+    @Column(name = "disk_count")
+    private String diskCount;
+
+    @Column(name = "head_count")
+    private String headCount;
+
+    @Column(name = "active_power_consumption_watt")
+    private String activePowerConsumptionWatt;
+
+    @Column(name = "idle_power_consumption_watt")
+    private String idlePowerConsumptionWatt;
+
+    @Column
     private String mtbf;
-    private Integer bufferMemory;
-    private String maxOverloadOn;
-    private BigDecimal averageWaitingTime;
-    private BigDecimal noiseLevel;
-    private String maxOverloadOff;
+
+    @Column
+    private String dimensions;
 
     @Override
     public void setId() {
-        setId(UUID.randomUUID().toString());
+        setId(manufacturer + " " + model);
     }
 }

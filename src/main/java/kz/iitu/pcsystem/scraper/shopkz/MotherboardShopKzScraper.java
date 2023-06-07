@@ -52,7 +52,7 @@ public class MotherboardShopKzScraper extends ShopKzScraper<Motherboard> {
             String[] frequencies = supportedMemoryTypes.replace("\\s", "").split(",");
 
             for (int i = 0; i < frequencies.length; i++) {
-                frequencies[i] = memoryType + "-" + frequencies[i];
+                frequencies[i] = memoryType + "-" + frequencies[i].strip();
             }
             result.put("supportedMemoryTypes", String.join(", ", frequencies));
         }

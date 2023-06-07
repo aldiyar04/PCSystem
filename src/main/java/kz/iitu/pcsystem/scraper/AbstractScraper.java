@@ -24,6 +24,8 @@ public abstract class AbstractScraper<T extends ComponentEntity> {
     @Autowired
     private WebDriverUtil driverUtil;
 
+    private int processedComponentCount = 0;
+
     public AbstractScraper(String pageQueryParam) {
         this.pageQueryParam = pageQueryParam;
     }
@@ -37,19 +39,22 @@ public abstract class AbstractScraper<T extends ComponentEntity> {
         characteristicMap.put("uri", "ссылка");
         if (!(this instanceof SecondaryStoreScraper<T>)) characteristicMap.put("imageUri", "ссылка на изображение");
 
-        List<ComponentProduct<T>> componentProducts = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
+        List<ComponentProduct<T>> componentProducts = new ArrayList<>();
+        List<Map<String, String>> componentMaps = getComponentItemCharacteristicMaps(componentBasePageUri, characteristicMap)
                 .stream()
                 .map(this::mapCharacteristics)
-                .map(componentItemCharacteristicMap -> {
-                    T component = objectMapper.convertValue(componentItemCharacteristicMap, componentPojoClass);
-                    component.setId();
-
-                    Product product = objectMapper.convertValue(componentItemCharacteristicMap, Product.class);
-                    product.setComponentId(component.getId());
-
-                    return new ComponentProduct<T>(component, product);
-                })
                 .toList();
+        for (Map<String, String> componentMap : componentMaps) {
+            T component = objectMapper.convertValue(componentMap, componentPojoClass);
+            component.setId();
+
+            Product product = objectMapper.convertValue(componentMap, Product.class);
+            product.setComponentId(component.getId());
+
+            componentProducts.add(new ComponentProduct<T>(component, product));
+
+            processedComponentCount++;
+        }
         if (!(this instanceof SecondaryStoreScraper<T>)) componentProducts.forEach(System.out::println);
         return componentProducts;
     }
@@ -72,12 +77,15 @@ public abstract class AbstractScraper<T extends ComponentEntity> {
         List<String> urisFromPage = getItemUrisFromPage(doc);
         System.out.println("Page #1: " + urisFromPage.size());
         result.addAll(urisFromPage);
-        for (int i = 2; i <= pageCount; i++) {
-            doc = getPage(basePageUri + "?" + pageQueryParam + "=" + i);
-            urisFromPage = getItemUrisFromPage(doc);
-            System.out.println("Page #" + i + ": " + urisFromPage.size());
-            result.addAll(urisFromPage);
-        }
+//        for (int i = 2; i <= pageCount; i++) {
+//            doc = getPage(basePageUri + "?" + pageQueryParam + "=" + i);
+//            urisFromPage = getItemUrisFromPage(doc);
+//            System.out.println("Page #" + i + ": " + urisFromPage.size());
+//            result.addAll(urisFromPage);
+//        }
+
+        // CHANGE "BATCHES" ("PAGINATION") HERE:
+        result = result.subList(0, 3);
 
         return result;
     }
@@ -132,6 +140,7 @@ public abstract class AbstractScraper<T extends ComponentEntity> {
         driverUtil.scrollToPageBottom();
         driverUtil.scrollToPageTop();
         String html = driverUtil.getCurrentHtml();
+        processedComponentCount++;
         return Jsoup.parse(html);
     }
 //    protected Document getPage(String uri) {
