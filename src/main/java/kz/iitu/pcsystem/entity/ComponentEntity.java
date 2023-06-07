@@ -40,13 +40,13 @@ public abstract class ComponentEntity {
         products.add(product);
     }
 
-    public static final String COMPONENT_TYPE_CPU = "CPU";
-    public static final String COMPONENT_TYPE_MOTHERBOARD = "MOTHERBOARD";
-    public static final String COMPONENT_TYPE_CPU_COOLER = "CPU_COOLER";
-    public static final String COMPONENT_TYPE_VIDEO_CARD = "VIDEO_CARD";
-    public static final String COMPONENT_TYPE_MEMORY = "MEMORY";
-    public static final String COMPONENT_TYPE_SSD = "SSD";
-    public static final String COMPONENT_TYPE_HDD = "HDD";
-    public static final String COMPONENT_TYPE_POWER_SUPPLY = "POWER_SUPPLY";
-    public static final String COMPONENT_TYPE_CASE = "CASEE";
+    public static final String COMPONENT_TYPE_CPU = "cpu";
+    public static final String COMPONENT_TYPE_MOTHERBOARD = "motherboard";
+    public static final String COMPONENT_TYPE_CPU_COOLER = "cpuCooler";
+    public static final String COMPONENT_TYPE_VIDEO_CARD = "videoCard";
+    public static final String COMPONENT_TYPE_MEMORY = "memory";
+    public static final String COMPONENT_TYPE_SSD = "ssd";
+    public static final String COMPONENT_TYPE_HDD = "hdd";
+    public static final String COMPONENT_TYPE_POWER_SUPPLY = "powerSupply";
+    public static final String COMPONENT_TYPE_CASE = "casee";
 }

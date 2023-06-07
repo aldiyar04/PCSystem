@@ -71,6 +71,7 @@ public class VideoCard extends ComponentEntity {
 
     @Override
     public void setId() {
-        setId(manufacturer + " " + model);
+        String id = manufacturer + "_" + model;
+        setId(id.replaceAll("\\s", "_").replaceAll("/", "--"));
     }
 }

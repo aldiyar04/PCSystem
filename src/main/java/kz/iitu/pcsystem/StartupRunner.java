@@ -25,7 +25,7 @@ public class StartupRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-//        motherboardScrapingManager.scrape();
+        motherboardScrapingManager.scrape();
     }
 
     private void search(String search) {

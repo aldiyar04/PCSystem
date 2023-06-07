@@ -24,7 +24,7 @@ import static kz.iitu.pcsystem.entity.ComponentEntity.*;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "component_id", nullable = false)

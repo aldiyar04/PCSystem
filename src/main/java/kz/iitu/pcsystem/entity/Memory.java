@@ -48,6 +48,7 @@ public class Memory extends ComponentEntity {
 
     @Override
     public void setId() {
-        setId(manufacturer + " " + memoryType + " " + memorySize);
+        String id = manufacturer + "_" + memoryType + "_" + memorySize;
+        setId(id.replaceAll("\\s", "_").replaceAll("/", "--"));
     }
 }
