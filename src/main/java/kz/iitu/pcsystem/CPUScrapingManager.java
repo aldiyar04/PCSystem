@@ -54,7 +54,7 @@ public class CPUScrapingManager {
         cpuProductsOfSecondaryStores.addAll(cpuProductsTechplaza);
         saveCpuProductsOfSecondaryStores(cpuProductsOfSecondaryStores);
 
-        List<CPU> cpus = cpuRepository.findAllWithMinPriceProductAndTwoOrMoreProducts(PageRequest.of(0, 20)).getContent();
+        List<CPU> cpus = cpuRepository.findAllSortedByProductCountDesc(PageRequest.of(0, 20)).getContent();
         for (CPU cpu : cpus) {
             System.out.println(cpu);
             for (Product product : cpu.getProducts()) {
